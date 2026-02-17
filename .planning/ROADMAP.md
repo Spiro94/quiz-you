@@ -37,12 +37,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Risk**: Low — Supabase auth is well-documented, no LLM dependency
 
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Supabase project setup, schema, RLS policies, environment config
-- [ ] 01-02: Auth UI (SignupForm, LoginForm, logout action, protected routes)
-- [ ] 01-03: Dashboard stub (authenticated landing page with empty-state copy)
+- [ ] 01-01-PLAN.md — Supabase project setup, users table schema, RLS policies, environment config
+- [ ] 01-02-PLAN.md — Auth UI: Supabase client, AuthContext, SignupForm, LoginForm, LogoutButton, ProtectedRoute, router wiring
+- [ ] 01-03-PLAN.md — Dashboard stub: authenticated landing page with DashboardHeader and empty-state copy
 
 ---
 
