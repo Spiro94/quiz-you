@@ -132,6 +132,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | Phase 1 | Pending |
 | AUTH-03 | Phase 1 | Pending |
 | AUTH-04 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
 | SETUP-01 | Phase 2 | Pending |
 | SETUP-02 | Phase 2 | Pending |
 | SETUP-03 | Phase 2 | Pending |
@@ -140,15 +141,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | QUIZ-01 | Phase 2 | Pending |
 | QUIZ-02 | Phase 2 | Pending |
 | QUIZ-03 | Phase 2 | Pending |
-| QUIZ-04 | Phase 3 | Pending |
 | QUIZ-05 | Phase 2 | Pending |
 | QUIZ-06 | Phase 2 | Pending |
+| QUIZ-04 | Phase 3 | Pending |
 | EVAL-01 | Phase 3 | Pending |
 | EVAL-02 | Phase 3 | Pending |
 | EVAL-03 | Phase 3 | Pending |
 | EVAL-04 | Phase 3 | Pending |
 | EVAL-05 | Phase 3 | Pending |
 | COMP-01 | Phase 3 | Pending |
+| DATA-01 | Phase 3 | Pending |
+| DATA-03 | Phase 3 | Pending |
 | COMP-02 | Phase 4 | Pending |
 | COMP-03 | Phase 4 | Pending |
 | COMP-04 | Phase 4 | Pending |
@@ -160,15 +163,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-05 | Phase 4 | Pending |
 | DASH-06 | Phase 4 | Pending |
 | DASH-07 | Phase 4 | Pending |
-| DATA-01 | Phase 1-3 | Pending |
-| DATA-02 | Phase 1 | Pending |
-| DATA-03 | Phase 3 | Pending |
 
 **Coverage:**
-- v1 requirements: 33 total
-- Mapped to phases: 33
-- Unmapped: 0 ✓
+- v1 requirements: 35 total
+- Mapped to phases: 35
+- Unmapped: 0
+
+Phase breakdown:
+- Phase 1: 5 requirements (AUTH-01 to AUTH-04, DATA-02)
+- Phase 2: 10 requirements (SETUP-01 to SETUP-05, QUIZ-01, QUIZ-02, QUIZ-03, QUIZ-05, QUIZ-06)
+- Phase 3: 9 requirements (QUIZ-04, EVAL-01 to EVAL-05, COMP-01, DATA-01, DATA-03)
+- Phase 4: 11 requirements (COMP-02 to COMP-05, DASH-01 to DASH-07)
 
 ---
 *Requirements defined: 2026-02-17*
-*Last updated: 2026-02-17 after research completion*
+*Last updated: 2026-02-17 after roadmap creation — traceability finalized*
