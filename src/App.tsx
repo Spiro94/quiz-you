@@ -4,9 +4,7 @@ import { AuthProvider } from './context/AuthContext'
 import { ProtectedRoute } from './components/layout/ProtectedRoute'
 import LoginPage from './pages/Login'
 import SignupPage from './pages/Signup'
-
-// Dashboard placeholder until 01-03 implements the real Dashboard component
-const DashboardPlaceholder = () => <div>Dashboard coming soon (01-03)</div>
+import DashboardPage from './pages/Dashboard'
 
 function App() {
   return (
@@ -19,7 +17,7 @@ function App() {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <DashboardPlaceholder />
+                <DashboardPage />
               </ProtectedRoute>
             }
           />
