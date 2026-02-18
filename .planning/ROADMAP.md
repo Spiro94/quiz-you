@@ -65,13 +65,13 @@ Plans:
 
 **Risk**: Medium — question quality consistency; apply versioned prompts and schema validation. Quality gate: less than 20% malformed or off-difficulty questions before shipping.
 
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 02-01: Database schema (sessions, questions tables), LLM provider abstraction (Claude + OpenAI fallback)
-- [ ] 02-02: Quiz setup form (topic/difficulty/type/count selectors), session creation API
-- [ ] 02-03: Question generation service (versioned prompt, schema validation, quality gate), QuestionDisplay component with streaming
-- [ ] 02-04: Answer input UI (text area + Monaco editor), skip logic, progress indicator
+- [ ] 02-01-PLAN.md — Database schema (quiz_sessions, quiz_questions, topics tables + RLS), LLM provider abstraction (ClaudeProvider + OpenAIProvider factory)
+- [ ] 02-02-PLAN.md — Quiz setup form (topic/difficulty/type/count selectors, Zod validation), session creation API (createQuizSession → Supabase insert)
+- [ ] 02-03-PLAN.md — Question generation service (versioned prompt, Zod schema validation, difficulty gate, 3x retry), QuizContext and useQuestionGeneration hook
+- [ ] 02-04-PLAN.md — Question display (markdown rendering, type/topic/difficulty badges), AnswerInput (Monaco editor + textarea), ProgressIndicator, TopicBadge, skip logic, human verification checkpoint
 
 ---
 
@@ -207,6 +207,6 @@ No parallel work on the critical path. Each phase unblocks the next.
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Authentication & Foundation | 0/3 | Complete    | 2026-02-18 |
-| 2. Quiz Setup & Question Generation | 0/4 | Not started | - |
+| 2. Quiz Setup & Question Generation | 0/4 | Planned      | - |
 | 3. Answer Evaluation & Scoring | 0/4 | Not started | - |
 | 4. Dashboard & Analytics | 0/4 | Not started | - |
