@@ -7,6 +7,7 @@ import LoginPage from './pages/Login'
 import SignupPage from './pages/Signup'
 import DashboardPage from './pages/Dashboard'
 import QuizSetupPage from './pages/QuizSetup'
+import QuizSessionPage from './pages/QuizSession'
 
 function App() {
   return (
@@ -37,10 +38,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <QuizProvider>
-                  {/* QuizSessionPage added in Plan 02-04 */}
-                  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                    <p className="text-gray-500">Loading quiz session...</p>
-                  </div>
+                  <QuizSessionPage />
                 </QuizProvider>
               </ProtectedRoute>
             }
