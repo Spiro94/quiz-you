@@ -1,4 +1,6 @@
 // src/components/dashboard/EmptyState.tsx
+import { Link } from 'react-router-dom'
+
 export function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center text-center px-6 py-24">
@@ -10,17 +12,12 @@ export function EmptyState() {
           Start a quiz session to practice interview questions. Your sessions,
           scores, and progress will appear here after you complete your first quiz.
         </p>
-        {/* Button becomes functional in Phase 2 */}
-        <button
-          disabled
-          className="inline-flex items-center px-5 py-2.5 rounded-lg bg-indigo-600 text-white text-sm font-medium opacity-50 cursor-not-allowed"
-          title="Coming soon — available after Phase 2"
+        <Link
+          to="/quiz/setup"
+          className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         >
           Start a quiz session
-        </button>
-        <p className="mt-3 text-xs text-gray-400">
-          Quiz session setup is coming in the next update.
-        </p>
+        </Link>
       </div>
     </div>
   )
