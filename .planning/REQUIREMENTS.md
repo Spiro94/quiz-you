@@ -24,12 +24,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Quiz Session Experience
 
-- [ ] **QUIZ-01**: User sees one question at a time with clear formatting and context
+- [x] **QUIZ-01**: User sees one question at a time with clear formatting and context
 - [ ] **QUIZ-02**: User can submit answer via text input (for theoretical questions) or code editor (for coding problems)
 - [ ] **QUIZ-03**: User can skip a question (marked as 0% score, moves to next)
 - [ ] **QUIZ-04**: User can navigate to next question after answer submission
 - [ ] **QUIZ-05**: Quiz session displays progress indicator (e.g., "Question 3 of 10")
-- [ ] **QUIZ-06**: Session shows which topics are covered in current quiz
+- [x] **QUIZ-06**: Session shows which topics are covered in current quiz
 
 ### Answer Evaluation & Feedback
 
@@ -138,11 +138,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SETUP-03 | Phase 2 | Complete |
 | SETUP-04 | Phase 2 | Complete |
 | SETUP-05 | Phase 2 | Pending |
-| QUIZ-01 | Phase 2 | Pending |
+| QUIZ-01 | Phase 2 | Complete |
 | QUIZ-02 | Phase 2 | Pending |
 | QUIZ-03 | Phase 2 | Pending |
 | QUIZ-05 | Phase 2 | Pending |
-| QUIZ-06 | Phase 2 | Pending |
+| QUIZ-06 | Phase 2 | Complete |
 | QUIZ-04 | Phase 3 | Pending |
 | EVAL-01 | Phase 3 | Pending |
 | EVAL-02 | Phase 3 | Pending |

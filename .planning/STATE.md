@@ -10,31 +10,31 @@ See: .planning/PROJECT.md (updated 2026-02-17)
 ## Current Position
 
 Phase: 2 of 4 (Quiz Setup & Question Generation)
-Plan: 2 of 4 in current phase
+Plan: 4 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-18 — Completed 02-01 Quiz Infrastructure & LLM Provider Abstraction. DB migration, TypeScript types, Zod schemas, and LLM abstraction layer complete.
+Last activity: 2026-02-18 — Completed 02-03 Question Generation Service & Quiz Session Context. generateQuestion() pipeline, QuizContext, useQuestionGeneration hook complete.
 
-Progress: [████░░░░░░] 31%
+Progress: [█████░░░░░] 44%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 41 min
-- Total execution time: 164 min
+- Total plans completed: 6
+- Average duration: 27 min
+- Total execution time: 168 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Auth & Foundation | 3/3 COMPLETE | 161 min | 54 min |
-| 2. Quiz Setup & Q Gen | 1/4 | 3 min | 3 min |
+| 2. Quiz Setup & Q Gen | 3/4 | 7 min | 2 min |
 | 3. Eval & Scoring | 0/4 | - | - |
 | 4. Dashboard & Analytics | 0/4 | - | - |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (27 min), 01-02 (8 min), 01-03 (126 min incl. human-verify checkpoint), 02-01 (3 min)
-- Trend: Human verification checkpoints add significant wall-clock time; execution time for auto tasks remains fast
+- Last 5 plans: 01-02 (8 min), 01-03 (126 min incl. human-verify checkpoint), 02-01 (3 min), 02-02 (~0 min), 02-03 (4 min)
+- Trend: Auto tasks execute fast; human verification checkpoints dominate wall-clock time
 
 *Updated after each plan completion*
 
@@ -63,12 +63,15 @@ Recent decisions affecting current work:
 - **[02-01]** PROMPT_VERSION=v1.0 embedded in every LLM prompt — enables tracing question quality to specific prompt versions for A/B tracking
 - **[02-01]** topics table has no RLS — reference data (public read only), RLS adds overhead with no security benefit
 - **[02-01]** getLLMProvider() defaults to 'anthropic' if VITE_DEFAULT_LLM_PROVIDER unset — throws descriptive error if API key missing (not cryptic SDK error)
+- **[02-03]** QuizProvider wraps only /quiz/:sessionId route (session-scoped, not app-scoped) — prevents stale state between quiz sessions
+- **[02-03]** Relationships: [] required in database.ts tables for supabase-js v2 GenericTable — without it Insert types resolve to never in tsc -b mode
+- **[02-03]** checkDifficultyMatch() uses text-length + vocabulary heuristic (no second LLM call) — keeps question generation O(1) cost per question
 
 ### Pending Todos
 
 - Supabase migration `supabase/migrations/20260218194543_users_table.sql` APPLIED — confirmed working during Phase 1 verification
-- Supabase migration `supabase/migrations/002_quiz_schema.sql` CREATED — must be applied manually in Supabase Dashboard → SQL Editor before Plan 02-03 runs
-- VITE_ANTHROPIC_API_KEY must be set in .env.local before Plan 02-03 (question generation) runs
+- Supabase migration `supabase/migrations/002_quiz_schema.sql` CREATED — must be applied manually in Supabase Dashboard → SQL Editor before Plan 02-04 runs (if not yet applied)
+- VITE_ANTHROPIC_API_KEY must be set in .env.local before Plan 02-04 (quiz session page with live question generation) runs
 
 ### Blockers/Concerns
 
@@ -79,5 +82,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-18
-Stopped at: Completed 02-01 Quiz Infrastructure & LLM Provider Abstraction (3 tasks, 3 commits). SUMMARY at .planning/phases/02-quiz-setup-and-question-generation/02-01-SUMMARY.md. Next: 02-02 Quiz Setup Form UI.
+Stopped at: Completed 02-03 Question Generation Service & Quiz Session Context (2 tasks, 2 commits). SUMMARY at .planning/phases/02-quiz-setup-and-question-generation/02-03-SUMMARY.md. Next: 02-04 Quiz Session Page.
 Resume file: None
