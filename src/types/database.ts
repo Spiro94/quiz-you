@@ -3,6 +3,9 @@
 // Mirrors public.users table columns from 001_users_table.sql migration.
 // Extended in 02-01 with quiz_sessions, quiz_questions, and topics tables.
 // Used to type the Supabase client: createClient<Database>(url, key)
+//
+// Note: Each table must include Relationships: [] to satisfy @supabase/supabase-js GenericTable constraint.
+// Views and Functions use Record<string, never> compatible shape via empty object literals.
 
 export interface Database {
   public: {
@@ -28,6 +31,7 @@ export interface Database {
           display_name?: string | null
           updated_at?: string
         }
+        Relationships: []
       }
       quiz_sessions: {
         Row: {
@@ -60,6 +64,7 @@ export interface Database {
           status?: 'in_progress' | 'completed' | 'abandoned'
           updated_at?: string
         }
+        Relationships: []
       }
       quiz_questions: {
         Row: {
@@ -91,6 +96,7 @@ export interface Database {
           body?: string
           expected_format?: string | null
         }
+        Relationships: []
       }
       topics: {
         Row: {
@@ -109,6 +115,7 @@ export interface Database {
           name?: string
           category?: 'language' | 'framework' | 'tool' | 'concept'
         }
+        Relationships: []
       }
     }
     Views: Record<string, never>

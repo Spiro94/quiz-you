@@ -18,7 +18,7 @@ export async function createQuizSession(
       difficulty: config.difficulty,
       question_types: config.questionTypes,
       question_count: parseInt(config.questionCount, 10) as 5 | 10 | 20,
-      status: 'in_progress'
+      status: 'in_progress' as const
     })
     .select()
     .single()
@@ -26,7 +26,7 @@ export async function createQuizSession(
   if (error) throw new Error(`Failed to create quiz session: ${error.message}`)
   if (!data) throw new Error('No data returned from quiz session creation')
 
-  return data
+  return data as QuizSessionRow
 }
 
 export async function getQuizSession(sessionId: string): Promise<QuizSessionRow | null> {
@@ -41,5 +41,5 @@ export async function getQuizSession(sessionId: string): Promise<QuizSessionRow 
     throw new Error(`Failed to fetch quiz session: ${error.message}`)
   }
 
-  return data
+  return data as QuizSessionRow | null
 }
