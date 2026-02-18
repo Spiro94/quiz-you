@@ -10,31 +10,31 @@ See: .planning/PROJECT.md (updated 2026-02-17)
 ## Current Position
 
 Phase: 1 of 4 (Authentication & Foundation)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-17 — Completed 01-01 Supabase Backend Setup (credentials, migration, TypeScript types)
+Last activity: 2026-02-18 — Completed 01-02 Authentication UI Layer (AuthContext, auth forms, ProtectedRoute, router config)
 
-Progress: [█░░░░░░░░░] 8%
+Progress: [██░░░░░░░░] 15%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 27 min
-- Total execution time: 27 min
+- Total plans completed: 2
+- Average duration: 18 min
+- Total execution time: 35 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Auth & Foundation | 1/3 | 27 min | 27 min |
+| 1. Auth & Foundation | 2/3 | 35 min | 18 min |
 | 2. Quiz Setup & Q Gen | 0/4 | - | - |
 | 3. Eval & Scoring | 0/4 | - | - |
 | 4. Dashboard & Analytics | 0/4 | - | - |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (27 min)
-- Trend: Baseline established
+- Last 5 plans: 01-01 (27 min), 01-02 (8 min)
+- Trend: Accelerating
 
 *Updated after each plan completion*
 
@@ -53,10 +53,15 @@ Recent decisions affecting current work:
 - **[01-01]** Trigger-based profile creation chosen over client-side INSERT — eliminates race condition where auth signup succeeds but profile creation fails; 100% profile coverage guaranteed
 - **[01-01]** RLS policies use `(SELECT auth.uid())` subquery form — evaluated once per query, not per row; prevents O(n) function calls
 - **[01-01]** `react-router-dom` and `zod` installed in 01-01 alongside `@supabase/supabase-js` — avoids blocking deviations in Plans 02/03
+- **[01-02]** getSession() called first then onAuthStateChange() — dual-init ensures session restored from localStorage before listener fires (critical for AUTH-03)
+- **[01-02]** loading state starts true, resolves false only after getSession() completes — prevents ProtectedRoute redirect flash on browser refresh
+- **[01-02]** signOut({ scope: 'global' }) awaited before navigate('/login') — ensures session destroyed before redirect
+- **[01-02]** DashboardPlaceholder in App.tsx — to be replaced when 01-03 implements real Dashboard component
 
 ### Pending Todos
 
-- **IMPORTANT:** Run `supabase/migrations/001_users_table.sql` in Supabase Dashboard SQL Editor before Plan 02 can proceed. Migration creates `public.users` table with RLS and triggers.
+- **IMPORTANT:** Run `supabase/migrations/20260218194543_users_table.sql` in Supabase Dashboard SQL Editor before auth flow works end-to-end. Migration creates `public.users` table with RLS and triggers.
+- **01-03:** Replace DashboardPlaceholder in src/App.tsx with real Dashboard import when 01-03 completes
 
 ### Blockers/Concerns
 
@@ -66,6 +71,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-17
-Stopped at: Completed 01-01 Supabase Backend Setup. Migration file created but must be applied in Supabase Dashboard before Plan 02 starts.
+Last session: 2026-02-18
+Stopped at: Completed 01-02 Authentication UI Layer. Auth forms, AuthContext, ProtectedRoute, and router all complete. Migration must be applied in Supabase Dashboard before end-to-end auth flow works.
 Resume file: None
