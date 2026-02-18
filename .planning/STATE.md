@@ -63,6 +63,8 @@ Recent decisions affecting current work:
 - **[02-01]** PROMPT_VERSION=v1.0 embedded in every LLM prompt — enables tracing question quality to specific prompt versions for A/B tracking
 - **[02-01]** topics table has no RLS — reference data (public read only), RLS adds overhead with no security benefit
 - **[02-01]** getLLMProvider() defaults to 'anthropic' if VITE_DEFAULT_LLM_PROVIDER unset — throws descriptive error if API key missing (not cryptic SDK error)
+- **[02-02]** Form component is purely presentational (onSubmit callback prop) — QuizSetup page owns session creation and navigation, keeping form reusable and testable
+- **[02-02]** questionCount parsed from string to int in createQuizSession() — radio values are strings but DB column type is 5|10|20 integer union
 - **[02-03]** QuizProvider wraps only /quiz/:sessionId route (session-scoped, not app-scoped) — prevents stale state between quiz sessions
 - **[02-03]** Relationships: [] required in database.ts tables for supabase-js v2 GenericTable — without it Insert types resolve to never in tsc -b mode
 - **[02-03]** checkDifficultyMatch() uses text-length + vocabulary heuristic (no second LLM call) — keeps question generation O(1) cost per question
@@ -82,5 +84,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-18
-Stopped at: Completed 02-03 Question Generation Service & Quiz Session Context (2 tasks, 2 commits). SUMMARY at .planning/phases/02-quiz-setup-and-question-generation/02-03-SUMMARY.md. Next: 02-04 Quiz Session Page.
+Stopped at: Completed 02-02 Quiz Setup Form & Session Creation (2 tasks, 2 commits). SUMMARY at .planning/phases/02-quiz-setup-and-question-generation/02-02-SUMMARY.md. Note: 02-03 already completed by prior agent. Next: 02-04 Quiz Session Page.
 Resume file: None
