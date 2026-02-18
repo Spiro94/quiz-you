@@ -207,6 +207,6 @@ No parallel work on the critical path. Each phase unblocks the next.
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Authentication & Foundation | 0/3 | Complete    | 2026-02-18 |
-| 2. Quiz Setup & Question Generation | 0/4 | Planned      | - |
+| 2. Quiz Setup & Question Generation | 1/4 | In Progress|  |
 | 3. Answer Evaluation & Scoring | 0/4 | Not started | - |
 | 4. Dashboard & Analytics | 0/4 | Not started | - |

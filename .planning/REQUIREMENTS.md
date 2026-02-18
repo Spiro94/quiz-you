@@ -16,10 +16,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Quiz Setup & Configuration
 
-- [ ] **SETUP-01**: User can select one or more programming languages/technologies from available list
-- [ ] **SETUP-02**: User can select difficulty level (beginner, normal, advanced)
-- [ ] **SETUP-03**: User can select one or more question types (coding problems, theoretical questions, or both)
-- [ ] **SETUP-04**: User can select number of questions for session (5, 10, 20)
+- [x] **SETUP-01**: User can select one or more programming languages/technologies from available list
+- [x] **SETUP-02**: User can select difficulty level (beginner, normal, advanced)
+- [x] **SETUP-03**: User can select one or more question types (coding problems, theoretical questions, or both)
+- [x] **SETUP-04**: User can select number of questions for session (5, 10, 20)
 - [ ] **SETUP-05**: User can view and start a new quiz session
 
 ### Quiz Session Experience
@@ -133,10 +133,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-03 | Phase 1 | Pending |
 | AUTH-04 | Phase 1 | Pending |
 | DATA-02 | Phase 1 | Pending |
-| SETUP-01 | Phase 2 | Pending |
-| SETUP-02 | Phase 2 | Pending |
-| SETUP-03 | Phase 2 | Pending |
-| SETUP-04 | Phase 2 | Pending |
+| SETUP-01 | Phase 2 | Complete |
+| SETUP-02 | Phase 2 | Complete |
+| SETUP-03 | Phase 2 | Complete |
+| SETUP-04 | Phase 2 | Complete |
 | SETUP-05 | Phase 2 | Pending |
 | QUIZ-01 | Phase 2 | Pending |
 | QUIZ-02 | Phase 2 | Pending |
