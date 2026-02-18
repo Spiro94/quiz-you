@@ -60,6 +60,11 @@ export default function QuizSessionPage() {
       return
     }
 
+    // Only generate if we haven't already generated a question for this index
+    if (question && session.questions.length > session.currentQuestionIndex) {
+      return
+    }
+
     const params = {
       topics: session.config.topics,
       difficulty: session.config.difficulty,
@@ -72,8 +77,7 @@ export default function QuizSessionPage() {
     generate(params, session.currentQuestionIndex).then(generated => {
       if (generated) addQuestion(generated)
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session?.currentQuestionIndex, sessionRow])
+  }, [session?.currentQuestionIndex, sessionRow, question, session?.questions.length, navigate, session?.config, session?.sessionId, reset, generate, addQuestion, isSessionComplete])
 
   const handleSkip = () => {
     skipQuestion()
