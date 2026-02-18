@@ -12,7 +12,7 @@ Quiz You ships in four sequential phases, each delivering a complete, verifiable
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Authentication & Foundation** - Users can create accounts, log in, and see an empty dashboard
+- [x] **Phase 1: Authentication & Foundation** - Users can create accounts, log in, and see an empty dashboard (completed 2026-02-18)
 - [ ] **Phase 2: Quiz Setup & Question Generation** - Users can configure a session and see LLM-generated questions
 - [ ] **Phase 3: Answer Evaluation & Scoring** - Users can answer questions and receive scored feedback with model answers
 - [ ] **Phase 4: Dashboard & Analytics** - Users can review session history, per-topic accuracy, and performance trends
@@ -206,7 +206,7 @@ No parallel work on the critical path. Each phase unblocks the next.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Authentication & Foundation | 0/3 | Not started | - |
+| 1. Authentication & Foundation | 0/3 | Complete    | 2026-02-18 |
 | 2. Quiz Setup & Question Generation | 0/4 | Not started | - |
 | 3. Answer Evaluation & Scoring | 0/4 | Not started | - |
 | 4. Dashboard & Analytics | 0/4 | Not started | - |
