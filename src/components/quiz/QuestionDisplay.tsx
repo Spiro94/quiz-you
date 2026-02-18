@@ -51,7 +51,7 @@ export function QuestionDisplay({ question }: QuestionDisplayProps) {
       {/* Question body — markdown rendered */}
       {/* Safe: markdown-it with html: false escapes all raw HTML from LLM before rendering */}
       <div
-        className="prose prose-sm max-w-none text-gray-700 prose-code:bg-gray-100 prose-code:rounded prose-code:px-1 prose-pre:bg-gray-900 prose-pre:text-gray-100"
+        className="prose prose-sm max-w-none text-gray-700 prose-code:bg-gray-100 prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-purple-700 prose-code:font-mono prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:text-sm [&_pre]:whitespace-pre-wrap [&_code]:break-words"
         dangerouslySetInnerHTML={{ __html: renderedBody }}
       />
 
