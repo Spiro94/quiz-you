@@ -123,13 +123,13 @@ Plans:
 
 **Risk**: Low to medium — no LLM dependency; complexity is in query performance and data aggregation. Use session_summaries denormalized table for fast dashboard reads.
 
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 04-01: Session summary screen (COMP-02, COMP-03, COMP-04, COMP-05) — final score, topic breakdown, difficulty recommendation
-- [ ] 04-02: Dashboard session list (DASH-01, DASH-02, DASH-07) — history list, date/topic filter/search
-- [ ] 04-03: Session detail view (DASH-03) — past session review with all Q/A/feedback
-- [ ] 04-04: Analytics views (DASH-04, DASH-05, DASH-06) — per-topic accuracy, trends, weak-area recommendations
+- [ ] 04-01-PLAN.md — session_summaries migration + SessionSummaryPage (COMP-02, COMP-03, COMP-04, COMP-05)
+- [ ] 04-02-PLAN.md — Dashboard session history list with FilterBar and pagination (DASH-01, DASH-02, DASH-07)
+- [ ] 04-03-PLAN.md — Session detail view with all Q/A/feedback (DASH-03)
+- [ ] 04-04-PLAN.md — Analytics: per-topic accuracy, performance trends, weak-area recommendation + human verify (DASH-04, DASH-05, DASH-06)
 
 ---
 
