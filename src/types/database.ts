@@ -98,6 +98,45 @@ export interface Database {
         }
         Relationships: []
       }
+      quiz_answers: {
+        Row: {
+          id: string
+          session_id: string
+          question_id: string | null
+          question_index: number
+          user_answer: string
+          status: 'pending_evaluation' | 'completed' | 'skipped' | 'evaluation_failed'
+          score: number | null
+          reasoning: string | null
+          feedback: string | null
+          model_answer: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          session_id: string
+          question_id?: string | null
+          question_index: number
+          user_answer: string
+          status?: 'pending_evaluation' | 'completed' | 'skipped' | 'evaluation_failed'
+          score?: number | null
+          reasoning?: string | null
+          feedback?: string | null
+          model_answer?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          status?: 'pending_evaluation' | 'completed' | 'skipped' | 'evaluation_failed'
+          score?: number | null
+          reasoning?: string | null
+          feedback?: string | null
+          model_answer?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       topics: {
         Row: {
           id: string
@@ -134,3 +173,7 @@ export type QuizSessionInsert = Database['public']['Tables']['quiz_sessions']['I
 export type QuizQuestionRow = Database['public']['Tables']['quiz_questions']['Row']
 export type QuizQuestionInsert = Database['public']['Tables']['quiz_questions']['Insert']
 export type TopicRow = Database['public']['Tables']['topics']['Row']
+
+export type QuizAnswerRow = Database['public']['Tables']['quiz_answers']['Row']
+export type QuizAnswerInsert = Database['public']['Tables']['quiz_answers']['Insert']
+export type QuizAnswerUpdate = Database['public']['Tables']['quiz_answers']['Update']
