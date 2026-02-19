@@ -3,7 +3,7 @@
 // Used when VITE_DEFAULT_LLM_PROVIDER=openai or as a backup if Anthropic is unavailable.
 import OpenAI from 'openai'
 import { buildQuestionPrompt } from './prompts'
-import type { LLMProvider, QuestionGenerationParams } from './types'
+import type { LLMProvider, QuestionGenerationParams, EvaluationParams, EvaluationResult } from './types'
 
 export class OpenAIProvider implements LLMProvider {
   private client: OpenAI
@@ -38,5 +38,10 @@ export class OpenAIProvider implements LLMProvider {
       const delta = chunk.choices[0]?.delta?.content
       if (delta) yield delta
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async evaluateAnswer(_params: EvaluationParams): Promise<EvaluationResult> {
+    throw new Error('OpenAI evaluation not implemented')
   }
 }
