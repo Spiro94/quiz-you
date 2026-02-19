@@ -80,3 +80,30 @@ export async function completeQuizSession(sessionId: string): Promise<void> {
 
   if (error) throw new Error(`Failed to complete quiz session: ${error.message}`)
 }
+
+// Insert a skipped answer row with status='skipped' and score=0 (DATA-03 — no gaps in session history).
+// 23505 = unique_violation: double-click protection for same question_index.
+export async function insertSkippedAnswer(params: {
+  sessionId: string
+  questionIndex: number
+  questionTitle?: string
+}): Promise<void> {
+  const { error } = await supabase
+    .from('quiz_answers')
+    .insert({
+      session_id: params.sessionId,
+      question_id: null,
+      question_index: params.questionIndex,
+      user_answer: '',
+      status: 'skipped' as const,
+      score: 0,
+      reasoning: 'Question skipped by user.',
+      feedback: 'This question was skipped.',
+      model_answer: params.questionTitle ?? null
+    })
+
+  if (error && error.code !== '23505') {
+    // 23505 = unique_violation: already skipped (double-click protection)
+    throw new Error(`Failed to save skipped answer: ${error.message}`)
+  }
+}

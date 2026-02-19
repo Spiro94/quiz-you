@@ -9,6 +9,7 @@ import { useQuizSession } from '../context/QuizContext'
 import { useQuestionGeneration } from '../hooks/useQuestionGeneration'
 import { useAnswerEvaluation } from '../hooks/useAnswerEvaluation'
 import { getQuizSession } from '../lib/quiz/sessions'
+import { completeQuizSession, insertSkippedAnswer } from '../lib/quiz/answers'
 import { QuestionDisplay } from '../components/quiz/QuestionDisplay'
 import { ProgressIndicator } from '../components/quiz/ProgressIndicator'
 import { AnswerInput } from '../components/quiz/AnswerInput'
@@ -96,7 +97,11 @@ export default function QuizSessionPage() {
   useEffect(() => {
     if (!session || !sessionRow) return
     if (isSessionComplete()) {
-      navigate('/dashboard') // Session complete — Phase 3 will add a summary screen
+      // Mark session completed in DB (COMP-01, DATA-01)
+      completeQuizSession(session.sessionId).catch(() => {
+        // Best-effort — navigate even if DB update fails
+      })
+      navigate('/dashboard')
       return
     }
 
@@ -124,6 +129,17 @@ export default function QuizSessionPage() {
   }, [session, sessionRow, navigate, generate, addQuestion, isSessionComplete])
 
   const handleSkip = () => {
+    // Persist skipped answer to DB (DATA-03 — no gaps in session history)
+    if (session) {
+      const currentQ = session.questions[session.currentQuestionIndex]
+      insertSkippedAnswer({
+        sessionId: session.sessionId,
+        questionIndex: session.currentQuestionIndex,
+        questionTitle: currentQ?.title
+      }).catch(() => {
+        // Best-effort — don't block quiz progress if DB write fails
+      })
+    }
     skipQuestion()
   }
 
