@@ -2,7 +2,7 @@
 // OpenAI fallback implementation of LLMProvider.
 // Used when VITE_DEFAULT_LLM_PROVIDER=openai or as a backup if Anthropic is unavailable.
 import OpenAI from 'openai'
-import { buildQuestionPrompt } from './prompts'
+import { buildQuestionPrompt, buildEvaluationPrompt } from './prompts'
 import type { LLMProvider, QuestionGenerationParams, EvaluationParams, EvaluationResult } from './types'
 
 export class OpenAIProvider implements LLMProvider {
@@ -40,8 +40,28 @@ export class OpenAIProvider implements LLMProvider {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async evaluateAnswer(_params: EvaluationParams): Promise<EvaluationResult> {
-    throw new Error('OpenAI evaluation not implemented')
+  async evaluateAnswer(params: EvaluationParams): Promise<EvaluationResult> {
+    const prompt = buildEvaluationPrompt(params)
+    const response = await this.client.chat.completions.create({
+      model: 'gpt-4o',
+      max_tokens: 2048,        // Evaluation needs more tokens than question generation
+      temperature: 0.2,        // Low temperature for deterministic, consistent scoring
+      messages: [{ role: 'user', content: prompt }]
+    })
+
+    const content = response.choices[0]?.message?.content
+    if (!content) throw new Error('Unexpected LLM response from evaluation (no content)')
+
+    // Parse JSON — LLM is prompted to return only valid JSON
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(content)
+    } catch {
+      throw new Error(`Evaluation returned invalid JSON: ${content.substring(0, 200)}`)
+    }
+
+    // EvaluationSchema.parse is called again in evaluation.ts, but we validate here too
+    // to catch LLM provider-level issues early with a clear error
+    return parsed as EvaluationResult
   }
 }
