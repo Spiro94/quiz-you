@@ -1,15 +1,18 @@
 // src/pages/QuizSession.tsx
 // Quiz session page. Orchestrates: session fetch → question generation → display → skip/submit → loop.
 // Uses QuizContext (useQuizSession) for local session state and useQuestionGeneration for LLM calls.
+// Phase 3: wired to useAnswerEvaluation for full evaluation lifecycle.
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useQuizSession } from '../context/QuizContext'
 import { useQuestionGeneration } from '../hooks/useQuestionGeneration'
+import { useAnswerEvaluation } from '../hooks/useAnswerEvaluation'
 import { getQuizSession } from '../lib/quiz/sessions'
 import { QuestionDisplay } from '../components/quiz/QuestionDisplay'
 import { ProgressIndicator } from '../components/quiz/ProgressIndicator'
 import { AnswerInput } from '../components/quiz/AnswerInput'
+import { EvaluationResult } from '../components/quiz/EvaluationResult'
 import { TopicBadge } from '../components/quiz/TopicBadge'
 import type { QuizSessionRow } from '../types/database'
 
@@ -34,6 +37,37 @@ export default function QuizSessionPage() {
   const [sessionRow, setSessionRow] = useState<QuizSessionRow | null>(null)
   const [fetchError, setFetchError] = useState<string | null>(null)
   const autoRequestedIndexRef = useRef<number | null>(null)
+
+  // Store last submitted answer for Retry button re-submission
+  const lastAnswerRef = useRef<string>('')
+
+  // Current question for the hook — null-safe with a fallback
+  const currentQuestion = session?.questions[session.currentQuestionIndex] ?? null
+
+  const {
+    submitAnswer,
+    evaluating,
+    evaluation,
+    error: evalError,
+    elapsedSeconds,
+    reset: resetEvaluation
+  } = useAnswerEvaluation({
+    sessionId: sessionId ?? '',
+    questionIndex: session?.currentQuestionIndex ?? 0,
+    question: currentQuestion ?? {
+      title: '',
+      body: '',
+      type: 'theoretical',
+      difficulty: 'normal',
+      topic: ''
+    },
+    questionId: null
+  })
+
+  // isLastQuestion: true when current question is the final one in the session
+  const isLastQuestion = session
+    ? session.currentQuestionIndex >= session.totalQuestions - 1
+    : false
 
   // Step 1: Fetch session from Supabase on mount
   useEffect(() => {
@@ -93,10 +127,22 @@ export default function QuizSessionPage() {
     skipQuestion()
   }
 
-  const handleSubmit = (answer: string) => {
-    // In Phase 2, submit just advances. Phase 3 adds evaluation.
-    console.log('Answer submitted (evaluation in Phase 3):', answer.substring(0, 100))
+  const handleSubmit = async (answer: string) => {
+    // Store for retry if evaluation fails
+    lastAnswerRef.current = answer
+    await submitAnswer(answer)
+    // moveToNextQuestion() is called by EvaluationResult's onNext, not here
+  }
+
+  const handleNext = () => {
+    resetEvaluation()
     moveToNextQuestion()
+  }
+
+  const handleRetry = () => {
+    if (lastAnswerRef.current) {
+      void submitAnswer(lastAnswerRef.current)
+    }
   }
 
   const progress = getProgress()
@@ -197,23 +243,65 @@ export default function QuizSessionPage() {
           </div>
         )}
 
-        {/* Question display and answer input */}
+        {/* Question display, answer input, and evaluation result */}
         {question && !isLoading && (
           <>
-            {/* QUIZ-01: Question display with clear formatting */}
+            {/* QUIZ-01: Question display with clear formatting — always visible */}
             <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-6">
               <QuestionDisplay question={question} />
             </div>
 
-            {/* QUIZ-02 + QUIZ-03: Answer input with Skip button */}
-            <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-4">Your Answer</h3>
-              <AnswerInput
-                question={question}
-                onSubmit={handleSubmit}
-                onSkip={handleSkip}
-              />
-            </div>
+            {/* Evaluation result panel — shown after successful evaluation */}
+            {evaluation && (
+              <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-6">
+                <EvaluationResult
+                  evaluation={evaluation}
+                  onNext={handleNext}
+                  isLastQuestion={isLastQuestion}
+                />
+              </div>
+            )}
+
+            {/* Evaluation loading state — shown while LLM is evaluating */}
+            {evaluating && (
+              <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-8">
+                <div className="flex flex-col items-center gap-3 text-gray-400">
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                  {elapsedSeconds < 20 ? (
+                    <p className="text-sm">Evaluating your answer...</p>
+                  ) : (
+                    <p className="text-sm text-amber-600">Still evaluating... (taking longer than usual)</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Evaluation error state — shown after failed evaluation (all retries exhausted) */}
+            {evalError && !evaluating && !evaluation && (
+              <div className="rounded-lg bg-red-50 border border-red-200 p-6 space-y-3">
+                <p className="text-sm text-red-700 font-medium">Evaluation failed</p>
+                <p className="text-xs text-red-600">{evalError}</p>
+                <button
+                  onClick={handleRetry}
+                  className="rounded-md bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-500"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+
+            {/* QUIZ-02 + QUIZ-03: Answer input — hidden after evaluation or during evaluation */}
+            {!evaluation && !evaluating && (
+              <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-6">
+                <h3 className="text-sm font-semibold text-gray-700 mb-4">Your Answer</h3>
+                <AnswerInput
+                  question={question}
+                  onSubmit={handleSubmit}
+                  onSkip={handleSkip}
+                  isSubmitting={evaluating}
+                />
+              </div>
+            )}
           </>
         )}
       </main>
