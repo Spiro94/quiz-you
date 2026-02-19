@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-17)
 ## Current Position
 
 Phase: 3 of 4 (Evaluation & Scoring)
-Plan: 1 of 4 in current phase
-Status: Ready — Phase 2 complete
-Last activity: 2026-02-18 — Completed 02-04 Quiz Session Page. All 10 Phase 2 requirements (SETUP-01 through QUIZ-06) verified in browser. Phase 2 COMPLETE.
+Plan: 2 of 4 in current phase
+Status: In progress — 03-01 complete
+Last activity: 2026-02-19 — Completed 03-01 quiz_answers migration, TypeScript types, and atomic persistence service (insertAnswer, updateAnswerEvaluation, completeQuizSession). DATA-01, DATA-03, EVAL-05 foundation complete.
 
-Progress: [██████░░░░] 56%
+Progress: [███████░░░] 63%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 27 min
-- Total execution time: 168 min
+- Total plans completed: 7
+- Average duration: 24 min
+- Total execution time: 169 min
 
 **By Phase:**
 
@@ -29,7 +29,7 @@ Progress: [██████░░░░] 56%
 |-------|-------|-------|----------|
 | 1. Auth & Foundation | 3/3 COMPLETE | 161 min | 54 min |
 | 2. Quiz Setup & Q Gen | 4/4 COMPLETE | 76 min | 19 min |
-| 3. Eval & Scoring | 0/4 | - | - |
+| 3. Eval & Scoring | 1/4 | 1 min | 1 min |
 | 4. Dashboard & Analytics | 0/4 | - | - |
 
 **Recent Trend:**
@@ -71,11 +71,17 @@ Recent decisions affecting current work:
 - [Phase 02-04]: useRef guard (autoRequestedIndexRef) prevents re-triggering LLM call when addQuestion() causes re-render — essential for cost control
 - [Phase 02-04]: Monaco editor lazy-loaded via React.lazy — defers 1.5MB chunk until user hits a coding question
 - [Phase 02-04]: markdown-it html: false enforced — LLM HTML output escaped before dangerouslySetInnerHTML, XSS-safe
+- **[03-01]** question_index denormalized onto quiz_answers — avoids JOIN to quiz_questions for Phase 4 history queries
+- **[03-01]** question_id nullable (ON DELETE SET NULL) — answer survives if source question is deleted
+- **[03-01]** reasoning (G-Eval chain-of-thought) stored in DB — enables debugging evaluation quality without re-running LLM
+- **[03-01]** completeQuizSession() co-located in answers.ts (not sessions.ts) — fires at answer submission boundary alongside other answer persistence functions
+- **[03-01]** UNIQUE (session_id, question_index) enforced at DB level — prevents duplicate answers per question per session
 
 ### Pending Todos
 
 - Supabase migration `supabase/migrations/20260218194543_users_table.sql` APPLIED — confirmed working during Phase 1 verification
 - Supabase migration `supabase/migrations/002_quiz_schema.sql` APPLIED — confirmed working during Phase 2 verification (quiz_sessions and quiz_questions tables functional)
+- Supabase migration `supabase/migrations/20260219000000_quiz_answers.sql` APPLIED — quiz_answers table live with RLS
 - VITE_ANTHROPIC_API_KEY confirmed working in .env.local — question generation verified in Phase 2
 
 ### Blockers/Concerns
@@ -86,6 +92,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-18
-Stopped at: Completed 02-04 Quiz Session Page (3 tasks, 4 commits). SUMMARY at .planning/phases/02-quiz-setup-and-question-generation/02-04-SUMMARY.md. Phase 2 COMPLETE — all 10 requirements verified. Next: Phase 3 Plan 01.
+Last session: 2026-02-19
+Stopped at: Completed 03-01 quiz_answers migration + atomic persistence service (2 tasks, 2 commits). SUMMARY at .planning/phases/03-answer-evaluation-and-scoring/03-01-SUMMARY.md. DATA-01, DATA-03, EVAL-05 foundation verified. Next: Phase 3 Plan 02.
 Resume file: None

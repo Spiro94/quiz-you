@@ -37,7 +37,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **EVAL-02**: LLM provides detailed feedback explaining what was correct and what to improve
 - [ ] **EVAL-03**: LLM provides model/reference answer for user to learn from
 - [ ] **EVAL-04**: User receives evaluation within reasonable time (<30 seconds)
-- [ ] **EVAL-05**: Evaluation results are saved to user's history
+- [x] **EVAL-05**: Evaluation results are saved to user's history
 
 ### Quiz Completion
 
@@ -59,9 +59,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Data Persistence & Reliability
 
-- [ ] **DATA-01**: All user sessions, answers, and scores are saved to database
+- [x] **DATA-01**: All user sessions, answers, and scores are saved to database
 - [ ] **DATA-02**: User data persists between sessions and browser visits
-- [ ] **DATA-03**: Session history is accurate and complete (no missing answers or scores)
+- [x] **DATA-03**: Session history is accurate and complete (no missing answers or scores)
 
 ## v2 Requirements
 
@@ -148,10 +148,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EVAL-02 | Phase 3 | Pending |
 | EVAL-03 | Phase 3 | Pending |
 | EVAL-04 | Phase 3 | Pending |
-| EVAL-05 | Phase 3 | Pending |
+| EVAL-05 | Phase 3 | Complete |
 | COMP-01 | Phase 3 | Pending |
-| DATA-01 | Phase 3 | Pending |
-| DATA-03 | Phase 3 | Pending |
+| DATA-01 | Phase 3 | Complete |
+| DATA-03 | Phase 3 | Complete |
 | COMP-02 | Phase 4 | Pending |
 | COMP-03 | Phase 4 | Pending |
 | COMP-04 | Phase 4 | Pending |
@@ -177,4 +177,4 @@ Phase breakdown:
 
 ---
 *Requirements defined: 2026-02-17*
-*Last updated: 2026-02-17 after roadmap creation — traceability finalized*
+*Last updated: 2026-02-19 after 03-01 — DATA-01, DATA-03, EVAL-05 marked complete*
