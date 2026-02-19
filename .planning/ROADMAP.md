@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Authentication & Foundation** - Users can create accounts, log in, and see an empty dashboard (completed 2026-02-18)
 - [x] **Phase 2: Quiz Setup & Question Generation** - Users can configure a session and see LLM-generated questions (completed 2026-02-19)
-- [ ] **Phase 3: Answer Evaluation & Scoring** - Users can answer questions and receive scored feedback with model answers
+- [x] **Phase 3: Answer Evaluation & Scoring** - Users can answer questions and receive scored feedback with model answers (completed 2026-02-19)
 - [ ] **Phase 4: Dashboard & Analytics** - Users can review session history, per-topic accuracy, and performance trends
 
 ## Phase Details
@@ -208,5 +208,5 @@ No parallel work on the critical path. Each phase unblocks the next.
 |-------|----------------|--------|-----------|
 | 1. Authentication & Foundation | 0/3 | Complete    | 2026-02-18 |
 | 2. Quiz Setup & Question Generation | 4/4 | Complete   | 2026-02-19 |
-| 3. Answer Evaluation & Scoring | 3/4 | In progress | - |
+| 3. Answer Evaluation & Scoring | 4/4 | Complete    | 2026-02-19 |
 | 4. Dashboard & Analytics | 0/4 | Not started | - |
