@@ -33,10 +33,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Answer Evaluation & Feedback
 
-- [ ] **EVAL-01**: LLM evaluates user answer and provides a score (0-100)
-- [ ] **EVAL-02**: LLM provides detailed feedback explaining what was correct and what to improve
-- [ ] **EVAL-03**: LLM provides model/reference answer for user to learn from
-- [ ] **EVAL-04**: User receives evaluation within reasonable time (<30 seconds)
+- [x] **EVAL-01**: LLM evaluates user answer and provides a score (0-100)
+- [x] **EVAL-02**: LLM provides detailed feedback explaining what was correct and what to improve
+- [x] **EVAL-03**: LLM provides model/reference answer for user to learn from
+- [x] **EVAL-04**: User receives evaluation within reasonable time (<30 seconds)
 - [x] **EVAL-05**: Evaluation results are saved to user's history
 
 ### Quiz Completion
@@ -144,10 +144,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | QUIZ-05 | Phase 2 | Complete |
 | QUIZ-06 | Phase 2 | Complete |
 | QUIZ-04 | Phase 3 | Pending |
-| EVAL-01 | Phase 3 | Pending |
-| EVAL-02 | Phase 3 | Pending |
-| EVAL-03 | Phase 3 | Pending |
-| EVAL-04 | Phase 3 | Pending |
+| EVAL-01 | Phase 3 | Complete |
+| EVAL-02 | Phase 3 | Complete |
+| EVAL-03 | Phase 3 | Complete |
+| EVAL-04 | Phase 3 | Complete |
 | EVAL-05 | Phase 3 | Complete |
 | COMP-01 | Phase 3 | Pending |
 | DATA-01 | Phase 3 | Complete |
