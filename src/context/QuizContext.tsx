@@ -3,7 +3,7 @@
 // Stores: session config, current question index, generated questions, skipped questions.
 // NOT persisted to localStorage — session is fetched from Supabase on mount (Plan 02-04).
 // TanStack Query handles server state; this Context handles derived UI state only.
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import type { QuizSessionRow } from '../types/database'
 import type { GeneratedQuestion } from '../types/quiz'
 
@@ -41,30 +41,36 @@ const QuizContext = createContext<QuizContextType | undefined>(undefined)
 export function QuizProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<QuizSessionState | null>(null)
 
-  const initializeSession = (sessionRow: QuizSessionRow) => {
-    setSession({
-      sessionId: sessionRow.id,
-      config: {
-        topics: sessionRow.topics,
-        difficulty: sessionRow.difficulty,
-        questionTypes: sessionRow.question_types,
-        questionCount: sessionRow.question_count
-      },
-      currentQuestionIndex: 0,
-      totalQuestions: sessionRow.question_count,
-      questions: [],
-      skippedQuestions: new Set()
-    })
-  }
+  const initializeSession = useCallback((sessionRow: QuizSessionRow) => {
+    setSession(prev => {
+      // StrictMode and repeated fetches can run this more than once.
+      // Keep current client state when we're already initialized for this session.
+      if (prev?.sessionId === sessionRow.id) return prev
 
-  const addQuestion = (question: GeneratedQuestion) => {
+      return {
+        sessionId: sessionRow.id,
+        config: {
+          topics: sessionRow.topics,
+          difficulty: sessionRow.difficulty,
+          questionTypes: sessionRow.question_types,
+          questionCount: sessionRow.question_count
+        },
+        currentQuestionIndex: 0,
+        totalQuestions: sessionRow.question_count,
+        questions: [],
+        skippedQuestions: new Set()
+      }
+    })
+  }, [])
+
+  const addQuestion = useCallback((question: GeneratedQuestion) => {
     setSession(prev => {
       if (!prev) return null
       return { ...prev, questions: [...prev.questions, question] }
     })
-  }
+  }, [])
 
-  const skipQuestion = () => {
+  const skipQuestion = useCallback(() => {
     setSession(prev => {
       if (!prev) return null
       const newSkipped = new Set(prev.skippedQuestions)
@@ -75,16 +81,16 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
         currentQuestionIndex: prev.currentQuestionIndex + 1
       }
     })
-  }
+  }, [])
 
-  const moveToNextQuestion = () => {
+  const moveToNextQuestion = useCallback(() => {
     setSession(prev => {
       if (!prev) return null
       return { ...prev, currentQuestionIndex: prev.currentQuestionIndex + 1 }
     })
-  }
+  }, [])
 
-  const getProgress = () => {
+  const getProgress = useCallback(() => {
     if (!session) return { current: 0, total: 0, percent: 0 }
     const current = session.currentQuestionIndex + 1
     const total = session.totalQuestions
@@ -93,28 +99,39 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
       total,
       percent: Math.round((Math.min(current, total) / total) * 100)
     }
-  }
+  }, [session])
 
-  const isSessionComplete = () => {
+  const isSessionComplete = useCallback(() => {
     if (!session) return false
     return session.currentQuestionIndex >= session.totalQuestions
-  }
+  }, [session])
+
+  const value = useMemo(() => ({
+    session,
+    initializeSession,
+    addQuestion,
+    skipQuestion,
+    moveToNextQuestion,
+    getProgress,
+    isSessionComplete
+  }), [
+    session,
+    initializeSession,
+    addQuestion,
+    skipQuestion,
+    moveToNextQuestion,
+    getProgress,
+    isSessionComplete
+  ])
 
   return (
-    <QuizContext.Provider value={{
-      session,
-      initializeSession,
-      addQuestion,
-      skipQuestion,
-      moveToNextQuestion,
-      getProgress,
-      isSessionComplete
-    }}>
+    <QuizContext.Provider value={value}>
       {children}
     </QuizContext.Provider>
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useQuizSession(): QuizContextType {
   const context = useContext(QuizContext)
   if (!context) {

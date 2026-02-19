@@ -1,7 +1,7 @@
 // src/pages/QuizSession.tsx
 // Quiz session page. Orchestrates: session fetch → question generation → display → skip/submit → loop.
 // Uses QuizContext (useQuizSession) for local session state and useQuestionGeneration for LLM calls.
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useQuizSession } from '../context/QuizContext'
@@ -27,12 +27,13 @@ export default function QuizSessionPage() {
     isSessionComplete
   } = useQuizSession()
 
-  const { question, isLoading, error, generate, reset } = useQuestionGeneration({
+  const { question, isLoading, error, generate } = useQuestionGeneration({
     sessionId: sessionId ?? ''
   })
 
   const [sessionRow, setSessionRow] = useState<QuizSessionRow | null>(null)
   const [fetchError, setFetchError] = useState<string | null>(null)
+  const autoRequestedIndexRef = useRef<number | null>(null)
 
   // Step 1: Fetch session from Supabase on mount
   useEffect(() => {
@@ -52,6 +53,11 @@ export default function QuizSessionPage() {
       })
   }, [sessionId, initializeSession])
 
+  // Reset auto-generation guard when changing sessions.
+  useEffect(() => {
+    autoRequestedIndexRef.current = null
+  }, [sessionId])
+
   // Step 2: Generate first question when session is ready, then each subsequent question
   useEffect(() => {
     if (!session || !sessionRow) return
@@ -61,9 +67,14 @@ export default function QuizSessionPage() {
     }
 
     // Only generate if we haven't already generated a question for this index
-    if (question && session.questions.length > session.currentQuestionIndex) {
+    if (session.questions.length > session.currentQuestionIndex) {
+      autoRequestedIndexRef.current = session.currentQuestionIndex
       return
     }
+
+    // Auto-generate at most once per index; retries are user-triggered via "Regenerate".
+    if (autoRequestedIndexRef.current === session.currentQuestionIndex) return
+    autoRequestedIndexRef.current = session.currentQuestionIndex
 
     const params = {
       topics: session.config.topics,
@@ -73,11 +84,10 @@ export default function QuizSessionPage() {
       questionIndex: session.currentQuestionIndex
     }
 
-    reset()
     generate(params, session.currentQuestionIndex).then(generated => {
       if (generated) addQuestion(generated)
     })
-  }, [session?.currentQuestionIndex, sessionRow, question, session?.questions.length, navigate, session?.config, session?.sessionId, reset, generate, addQuestion, isSessionComplete])
+  }, [session, sessionRow, navigate, generate, addQuestion, isSessionComplete])
 
   const handleSkip = () => {
     skipQuestion()
