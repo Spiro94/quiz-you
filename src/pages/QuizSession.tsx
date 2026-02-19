@@ -129,6 +129,9 @@ export default function QuizSessionPage() {
   }, [session, sessionRow, navigate, generate, addQuestion, isSessionComplete])
 
   const handleSkip = () => {
+    // Clear any lingering error/evaluation state from previous question
+    resetEvaluation()
+
     // Persist skipped answer to DB (DATA-03 — no gaps in session history)
     if (session) {
       const currentQ = session.questions[session.currentQuestionIndex]
