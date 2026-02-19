@@ -94,13 +94,13 @@ Plans:
 
 **Risk**: High — false positive/negative scoring undermines user trust. Mitigation: multi-step evaluation (LLM score + schema validation + rubric cross-check), stateless evaluation context per answer. Quality gate: greater than 85% evaluation accuracy on test suite before shipping.
 
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 03-01: Answers and evaluations schema, atomic write service (save answer before evaluation starts)
-- [ ] 03-02: Answer evaluation service (streaming, multi-step rubric validation, stateless context per answer)
-- [ ] 03-03: FeedbackDisplay component (score, feedback, model answer, next-question navigation)
-- [ ] 03-04: Session completion logic (auto-end, COMP-01 enforcement, DATA-01/DATA-03 audit)
+- [ ] 03-01-PLAN.md — quiz_answers DB migration + TypeScript types + atomic persistence service (insertAnswer, updateAnswerEvaluation, completeQuizSession)
+- [ ] 03-02-PLAN.md — G-Eval evaluation service (chain-of-thought scoring, stateless context, 30s timeout, exponential backoff retry, Zod validation, ClaudeProvider.evaluateAnswer)
+- [ ] 03-03-PLAN.md — useAnswerEvaluation hook + EvaluationResult component (score/feedback/model answer) + QuizSession answer submission wiring
+- [ ] 03-04-PLAN.md — Session completion (completeQuizSession on last question), skip persistence (quiz_answers status='skipped'), human verification checkpoint
 
 ---
 
