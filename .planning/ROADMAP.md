@@ -182,6 +182,15 @@ Phase 2: 10 requirements
 Phase 3: 9 requirements
 Phase 4: 11 requirements
 
+### Phase 5: UI Redesign with quiz-you.pen
+
+**Goal:** [To be planned]
+**Depends on:** Phase 4
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 5 to break down)
+
 ---
 
 ## Critical Dependencies

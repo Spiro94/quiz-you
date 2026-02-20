@@ -40,6 +40,10 @@ Progress: [███████████████] 100% (PROJECT COMPLETE
 
 ## Accumulated Context
 
+### Roadmap Evolution
+
+- Phase 5 added: UI Redesign with quiz-you.pen — apply design system to all screens (2026-02-20)
+
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
