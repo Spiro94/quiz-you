@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-17)
 
 **Core value:** Developers can practice interviews in their spare time with realistic LLM-driven questions so they can be ready for any job interview or internal assessments at the company they're currently working at.
-**Current focus:** Phase 5 — UI Redesign with quiz-you.pen. Plan 05-01 complete (auth flow). Plans 05-02 (quiz flow) and 05-03 (dashboard flow) remaining.
+**Current focus:** Phase 5 — UI Redesign with quiz-you.pen. Plans 05-01 (auth flow) and 05-03 (dashboard flow) complete. Plan 05-02 (quiz flow) remaining — awaiting human-verify checkpoint for 05-03.
 
 ## Current Position
 
 Phase: 5 of 5 (UI Redesign with quiz-you.pen) — In Progress
-Plan: 1 of 3 in current phase — COMPLETE
-Status: 05-01 complete and APPROVED — token system (@theme), Login two-column layout, Signup two-column layout, LoginForm, SignupForm, LogoutButton, DashboardHeader all match quiz-you.pen.
-Last activity: 2026-02-20 — Plan 05-01 human-verify checkpoint APPROVED. Auth flow dark mode verified in browser. Ready for 05-02 (quiz flow redesign).
+Plan: 3 of 3 in current phase — AWAITING CHECKPOINT
+Status: 05-03 auto tasks complete — 9 dashboard flow files restyled with dark design tokens, Recharts dark theme applied, getScoreColor/getScoreBgColor updated to token classes. Awaiting human-verify checkpoint approval.
+Last activity: 2026-02-20 — Plan 05-03 tasks 1 and 2 complete. Checkpoint:human-verify reached.
 
-Progress: [████████████░░░] 80% (Phase 5 in progress — 1/3 plans complete)
+Progress: [█████████████░░] 87% (Phase 5 in progress — 2/3 plans complete, 05-03 awaiting verify)
 
 ## Performance Metrics
 
@@ -116,6 +116,10 @@ Recent decisions affecting current work:
 - **[05-01]** quiz-you.pen has no Screen/Signup — Signup page mirrors Screen/Login left panel identically; auth card adapts for signup context
 - **[05-01]** Auth card title/subtitle live inside LoginForm/SignupForm (not page wrapper) — matches quiz-you.pen authCard where header is part of the card structure
 - **[05-01]** Footer links use text-primary (purple) not text-accent (cyan) — quiz-you.pen authFooterLink uses $--primary; accent is reserved for different semantic use
+- **[05-03]** Recharts SVG chart props (stroke, fill, tick.fill) require explicit hex values from design tokens — CSS utility classes have no effect on SVG elements
+- **[05-03]** scoreToColor() in PerTopicAccuracy uses hex values for SVG Cell fill; getScoreColor() in recommendations.ts uses Tailwind token classes for DOM text — dual approach serves both contexts
+- **[05-03]** getScoreColor returns text-success/text-accent/text-warning/text-error; getScoreBgColor returns bg-success-muted/bg-primary-muted/bg-warning-muted/bg-error-muted — propagates to all callers
+- **[05-03]** FilterBar active topic chips use bg-primary-muted border-primary text-primary (not solid bg-primary) — consistent with quiz-you.pen muted pattern for selected states
 
 ### Pending Todos
 
@@ -133,6 +137,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-20
-Completed: 05-01-PLAN.md — human-verify checkpoint APPROVED. Token system + full auth flow (Login two-column, Signup two-column, LoginForm, SignupForm, LogoutButton, DashboardHeader) match quiz-you.pen Screen/Login design.
+Completed: 05-03-PLAN.md tasks 1 and 2 — dashboard flow dark mode. 9 files restyled (Dashboard, SessionHistoryList, FilterBar, EmptyState, NextQuizRecommendation, PerTopicAccuracy, PerformanceTrends, SessionSummary, SessionDetail) + recommendations.ts token updates. Recharts dark theme applied. CHECKPOINT:human-verify reached.
 Resume file: None
-Status: Phase 5 in progress — next plan is 05-02 (quiz flow redesign)
+Status: Phase 5 plan 05-03 awaiting human-verify checkpoint approval. Plan 05-02 (quiz flow) also remaining.
