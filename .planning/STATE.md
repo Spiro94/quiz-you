@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-17)
 ## Current Position
 
 Phase: 4 of 4 (Dashboard & Analytics)
-Plan: 0 of 4 in current phase
-Status: Phase 3 COMPLETE — starting Phase 4
-Last activity: 2026-02-19 — Completed 03-04: session completion (completeQuizSession on isSessionComplete), skip persistence (insertSkippedAnswer status='skipped'), human verification passed (all 9 Phase 3 requirements: QUIZ-04, EVAL-01-05, COMP-01, DATA-01, DATA-03). Phase 3 complete.
+Plan: 1 of 4 in current phase
+Status: Phase 4 in progress — 04-01 complete
+Last activity: 2026-02-20 — Completed 04-01: session_summaries migration, computeSessionSummary() pure function, SessionSummaryPage at /session/:sessionId/summary, updated completeQuizSession() to upsert session_summaries, router updated. Requirements COMP-02, COMP-03, COMP-04, COMP-05 complete.
 
-Progress: [███████████░░░░] 75% (Phase 3 complete — Phase 4 next)
+Progress: [████████████░░░] 78% (Phase 4 in progress: 1/4 plans complete)
 
 ## Performance Metrics
 
@@ -30,7 +30,7 @@ Progress: [███████████░░░░] 75% (Phase 3 complete 
 | 1. Auth & Foundation | 3/3 COMPLETE | 161 min | 54 min |
 | 2. Quiz Setup & Q Gen | 4/4 COMPLETE | 76 min | 19 min |
 | 3. Eval & Scoring | 4/4 COMPLETE | 48 min | 12 min |
-| 4. Dashboard & Analytics | 0/4 | - | - |
+| 4. Dashboard & Analytics | 1/4 | 2 min | 2 min |
 
 **Recent Trend:**
 - Last 5 plans: 02-04 (69 min incl. human-verify), 03-01 (1 min), 03-02 (2 min), 03-03 (2 min), 03-04 (43 min incl. human-verify)
@@ -89,6 +89,11 @@ Recent decisions affecting current work:
 - **[03-04]** Best-effort pattern for insertSkippedAnswer/completeQuizSession — UI progress must never be blocked by DB write failures
 - **[03-04]** OpenAI evaluateAnswer() implemented during verification for provider parity — gpt-4o, temperature=0.2, max_tokens=2048, mirrors ClaudeProvider
 - **[03-04]** resetEvaluation() called at top of handleSkip — clears prior question error state before advancing to prevent stale UI
+- **[04-01]** computeSessionSummary() receives _topic-enriched answers — caller does question_index → topic join so pure function stays Supabase-free
+- **[04-01]** session_summaries upserted with onConflict: session_id — idempotent protection against double-fire from React StrictMode/re-renders
+- **[04-01]** Summary insert is non-fatal (console.error only) — session completion always succeeds even if session_summaries write fails
+- **[04-01]** QuizSession.tsx navigate changed from /dashboard to /session/:sessionId/summary — closes quiz loop with feedback before dashboard return
+- **[04-01]** src/lib/dashboard/ directory established for pure computation functions with no Supabase dependency
 
 ### Pending Todos
 
@@ -105,6 +110,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-19
-Stopped at: Completed 03-04 session completion + skip persistence (1 auto task + human verify, 3 commits). SUMMARY at .planning/phases/03-answer-evaluation-and-scoring/03-04-SUMMARY.md. Phase 3 COMPLETE — all 9 requirements verified (QUIZ-04, EVAL-01-05, COMP-01, DATA-01, DATA-03). Next: Phase 4 Plan 01 (session summary screen).
+Last session: 2026-02-20
+Stopped at: Completed 04-01-PLAN.md — session summary page (2 auto tasks, 2 commits). SUMMARY at .planning/phases/04-dashboard-analytics/04-01-SUMMARY.md. Requirements COMP-02, COMP-03, COMP-04, COMP-05 complete. Migration 20260220000000_session_summaries.sql ready to apply. Next: Phase 4 Plan 02.
 Resume file: None
