@@ -39,16 +39,18 @@ export function checkDifficultyMatch(question: GeneratedQuestion, requested: Dif
   const bodyLength = question.body.length
   const hasAdvancedVocab = /\b(abstract|generics|reflection|metaprogramming|concurren|parallelism|architecture|distributed|scalab|microservice|asynchronous|mutex|semaphore|garbage\s*collect)\b/i.test(question.body)
 
+  // v1.1: All questions must be concise (max 400 chars), so just validate it's within bounds
+  // Advanced level can use complex vocab; beginner/normal should avoid it
   switch (requested) {
     case 'beginner':
-      // Beginner questions should be concise and avoid advanced vocabulary
-      return bodyLength <= 800 && !hasAdvancedVocab
+      // Beginner questions should be simple and avoid advanced vocabulary
+      return bodyLength <= 400 && !hasAdvancedVocab
     case 'normal':
-      // Normal questions have moderate length
-      return bodyLength >= 80 && bodyLength <= 1500
+      // Normal questions should be focused and moderately detailed
+      return bodyLength >= 50 && bodyLength <= 400
     case 'advanced':
-      // Advanced questions should be longer OR cover complex concepts
-      return bodyLength >= 300 || hasAdvancedVocab
+      // Advanced questions can be complex but still concise
+      return bodyLength >= 50 && bodyLength <= 400
     default:
       return true
   }

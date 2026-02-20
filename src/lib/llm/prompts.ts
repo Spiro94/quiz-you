@@ -4,7 +4,7 @@
 // Update PROMPT_VERSION / EVAL_PROMPT_VERSION when changing prompts to enable A/B tracking.
 import type { QuestionGenerationParams, EvaluationParams } from './types'
 
-export const PROMPT_VERSION = 'v1.0'
+export const PROMPT_VERSION = 'v1.1'
 
 export function buildQuestionPrompt(params: QuestionGenerationParams): string {
   const { topics, difficulty, types } = params
@@ -16,26 +16,33 @@ export function buildQuestionPrompt(params: QuestionGenerationParams): string {
       : 'a theoretical question requiring a written explanation'
 
   const difficultyGuide = {
-    beginner: 'suitable for developers with 0-1 years of experience. Focus on fundamentals, basic syntax, and simple concepts.',
-    normal: 'suitable for developers with 1-3 years of experience. Include real-world scenarios and moderate complexity.',
-    advanced: 'suitable for developers with 3+ years of experience. Cover edge cases, performance considerations, and architectural decisions.'
+    beginner: 'fundamentals, basic syntax, and simple concepts (0-1 years experience)',
+    normal: 'real-world scenarios and moderate complexity (1-3 years experience)',
+    advanced: 'edge cases, performance considerations, and architectural decisions (3+ years experience)'
   }[difficulty]
 
-  return `You are a technical interviewer generating a single interview question.
+  return `You are a structured technical interviewer for programming topics.
 
 Generate ${typeList} about one of these topics: ${topicList}
-Difficulty level: ${difficulty} — ${difficultyGuide}
+Difficulty: ${difficulty} — ${difficultyGuide}
 
-IMPORTANT: Return ONLY a valid JSON object. No markdown fences, no explanation, no preamble.
+CRITICAL INSTRUCTIONS FOR CONCISENESS:
+- Keep the question body SHORT and FOCUSED. Maximum 400 characters.
+- For coding: include only the problem statement and constraints. Use concise examples.
+- For theoretical: ask one clear question without excessive context.
+- Avoid verbose explanations, wall-of-text introductions, or unnecessary background.
+- Be direct and precise.
+
+Return ONLY a valid JSON object. No markdown fences, no explanation, no preamble.
 
 Required JSON structure:
 {
-  "title": "Brief question title (10-200 chars)",
-  "body": "Full question text with context (50-1500 chars). For coding questions include the problem statement, constraints, and example inputs/outputs. For theoretical questions include the scenario or concept to explain.",
+  "title": "Concise question title (5-20 words, max 100 chars)",
+  "body": "Direct, focused question (max 400 chars). For coding: problem statement + brief constraints + one example. For theoretical: one clear question.",
   "type": "${types.length === 1 ? types[0] : 'coding or theoretical'}",
   "difficulty": "${difficulty}",
   "topic": "The specific topic from [${topicList}] this question covers",
-  "expectedFormat": "e.g. 'Python function', 'Paragraph explanation', 'SQL query'"
+  "expectedFormat": "e.g. 'Python function', 'Brief explanation', 'SQL query'"
 }
 
 Prompt version: ${PROMPT_VERSION}`
