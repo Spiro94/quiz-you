@@ -31,7 +31,7 @@ export default function QuizSetupPage() {
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
       {/* .pen wizardWrap: width 680, vertical layout, gap 32 */}
       <div className="w-full" style={{ maxWidth: 680 }}>
-        <QuizSetupForm onSubmit={handleSubmit} error={error} />
+        <QuizSetupForm onSubmit={handleSubmit} onCancel={() => navigate('/dashboard')} error={error} />
       </div>
     </div>
   )

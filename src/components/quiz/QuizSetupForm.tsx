@@ -10,6 +10,7 @@ import type { QuizSetupFormData } from '../../types/quiz'
 
 interface QuizSetupFormProps {
   onSubmit: (data: QuizSetupFormData) => Promise<void>
+  onCancel: () => void
   error?: string | null
 }
 
@@ -20,7 +21,7 @@ type QuestionCount = '5' | '10' | '20'
 
 const COUNT_OPTIONS: QuestionCount[] = ['5', '10', '20']
 
-export function QuizSetupForm({ onSubmit, error }: QuizSetupFormProps) {
+export function QuizSetupForm({ onSubmit, onCancel, error }: QuizSetupFormProps) {
   const [step, setStep] = useState<Step>(1)
   const [topics, setTopics] = useState<string[]>([])
   const [difficulty, setDifficulty] = useState<Difficulty>('normal')
@@ -172,6 +173,7 @@ export function QuizSetupForm({ onSubmit, error }: QuizSetupFormProps) {
             <div className="flex items-center justify-between">
               <button
                 type="button"
+                onClick={onCancel}
                 className="rounded-lg bg-elevated border border-border h-10 px-4 text-sm font-medium text-foreground hover:bg-subtle transition"
               >
                 Cancel
