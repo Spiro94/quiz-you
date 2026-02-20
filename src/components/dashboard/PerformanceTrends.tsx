@@ -11,20 +11,20 @@ export function PerformanceTrends() {
   const { data: trends = [], isLoading } = usePerformanceTrends()
 
   if (isLoading) {
-    return <div className="h-64 bg-gray-100 rounded-lg animate-pulse" />
+    return <div className="h-64 bg-subtle rounded-lg animate-pulse" />
   }
 
   if (trends.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6 text-center">
-        <p className="text-gray-400 text-sm">Complete sessions to see your progress over time.</p>
+      <div className="bg-surface rounded-lg border border-border p-6 text-center">
+        <p className="text-muted-foreground text-sm">Complete sessions to see your progress over time.</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <h2 className="text-base font-semibold text-gray-800 mb-4">Performance Over Time</h2>
+    <div className="bg-surface rounded-lg border border-border p-6">
+      <h2 className="text-base font-semibold text-foreground mb-4">Performance Over Time</h2>
       <div
         role="img"
         aria-label="Line chart showing quiz score trend over time"
@@ -34,30 +34,38 @@ export function PerformanceTrends() {
             data={trends}
             margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#2E2E3F" strokeOpacity={0.5} />
             <XAxis
               dataKey="date"
               tickFormatter={d => {
                 try { return format(new Date(d), 'MMM d') }
                 catch { return '' }
               }}
-              tick={{ fontSize: 11 }}
+              tick={{ fill: '#A1A1B5', fontSize: 11 }}
+              axisLine={{ stroke: '#2E2E3F' }}
+              tickLine={{ stroke: '#2E2E3F' }}
             />
-            <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
+            <YAxis
+              domain={[0, 100]}
+              tick={{ fill: '#A1A1B5', fontSize: 11 }}
+              axisLine={{ stroke: '#2E2E3F' }}
+              tickLine={{ stroke: '#2E2E3F' }}
+            />
             <Tooltip
               labelFormatter={label => {
                 try { return format(new Date(label as string), 'MMM d, yyyy') }
                 catch { return label as string }
               }}
               formatter={(value: number | undefined) => [`${value ?? 0}`, 'Score']}
+              contentStyle={{ backgroundColor: '#1C1C27', border: '1px solid #2E2E3F', borderRadius: '6px', color: '#F4F4F6' }}
             />
             <Line
               type="monotone"
               dataKey="avgScore"
-              stroke="#2563eb"
+              stroke="#7C3AED"
               strokeWidth={2}
-              dot={{ fill: '#2563eb', r: 3 }}
-              activeDot={{ r: 5 }}
+              dot={{ fill: '#7C3AED', r: 3 }}
+              activeDot={{ r: 5, fill: '#06B6D4' }}
             />
           </LineChart>
         </ResponsiveContainer>
