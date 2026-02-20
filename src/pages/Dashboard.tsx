@@ -4,6 +4,9 @@ import { useSearchParams, Link } from 'react-router-dom'
 import { DashboardHeader } from '../components/dashboard/DashboardHeader'
 import { FilterBar, type FilterState } from '../components/dashboard/FilterBar'
 import { SessionHistoryList } from '../components/dashboard/SessionHistoryList'
+import { PerTopicAccuracy } from '../components/dashboard/PerTopicAccuracy'
+import { PerformanceTrends } from '../components/dashboard/PerformanceTrends'
+import { NextQuizRecommendation } from '../components/dashboard/NextQuizRecommendation'
 import { useSessions } from '../hooks/useSessions'
 
 const PAGE_SIZE = 10
@@ -66,6 +69,16 @@ export default function DashboardPage() {
           onPrevPage={handlePrevPage}
           pageSize={PAGE_SIZE}
         />
+
+        {/* Analytics section */}
+        <div className="space-y-4 pt-4 border-t border-gray-200">
+          <h2 className="text-lg font-bold text-gray-900">Analytics</h2>
+          <NextQuizRecommendation />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <PerTopicAccuracy />
+            <PerformanceTrends />
+          </div>
+        </div>
       </main>
     </div>
   )
