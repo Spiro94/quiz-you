@@ -26,16 +26,16 @@ export default function QuizSetupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-2xl px-4 py-12">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Configure Your Quiz</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-foreground">Configure Your Quiz</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Select your topics, difficulty, and format, then start your session.
           </p>
         </div>
 
-        <div className="rounded-lg bg-white shadow-sm border border-gray-200 p-6">
+        <div className="rounded-lg bg-surface border border-border p-6">
           <QuizSetupForm onSubmit={handleSubmit} error={error} />
         </div>
       </div>

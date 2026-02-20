@@ -179,8 +179,8 @@ export default function QuizSessionPage() {
   // Loading state
   if (!sessionRow && !fetchError) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">Loading session...</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Loading session...</p>
       </div>
     )
   }
@@ -188,12 +188,12 @@ export default function QuizSessionPage() {
   // Session fetch error
   if (fetchError) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-3">
-          <p className="text-red-600 font-medium">{fetchError}</p>
+          <p className="text-error font-medium">{fetchError}</p>
           <button
             onClick={() => navigate('/quiz/setup')}
-            className="text-sm text-blue-600 underline"
+            className="text-sm text-accent underline"
           >
             Start a new quiz
           </button>
@@ -203,13 +203,13 @@ export default function QuizSessionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Session header: topic badges + progress indicator */}
-      <header className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3 shadow-sm">
+      <header className="sticky top-0 z-10 border-b border-border bg-surface px-4 py-3">
         <div className="mx-auto max-w-3xl space-y-2">
           {/* QUIZ-06: Topics covered in session */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-medium text-gray-500 mr-1">Topics:</span>
+            <span className="text-xs font-medium text-muted-foreground mr-1">Topics:</span>
             {session?.config.topics.map(topic => (
               <TopicBadge key={topic} topic={topic} />
             ))}
@@ -227,9 +227,9 @@ export default function QuizSessionPage() {
       <main className="mx-auto max-w-3xl px-4 py-8 space-y-8">
         {/* Question generation loading state */}
         {isLoading && (
-          <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-8">
-            <div className="flex flex-col items-center gap-3 text-gray-400">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+          <div className="rounded-lg bg-surface border border-border p-8">
+            <div className="flex flex-col items-center gap-3 text-muted-foreground">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
               <p className="text-sm">Generating question...</p>
             </div>
           </div>
@@ -237,9 +237,9 @@ export default function QuizSessionPage() {
 
         {/* Question generation error state */}
         {error && !isLoading && (
-          <div className="rounded-lg bg-red-50 border border-red-200 p-6 space-y-3">
-            <p className="text-sm text-red-700 font-medium">Failed to generate question</p>
-            <p className="text-xs text-red-600">{error}</p>
+          <div className="rounded-lg bg-error-muted border border-error p-6 space-y-3">
+            <p className="text-sm text-error font-medium">Failed to generate question</p>
+            <p className="text-xs text-error">{error}</p>
             <div className="flex gap-3">
               <button
                 onClick={() => {
@@ -255,13 +255,13 @@ export default function QuizSessionPage() {
                     if (generated) addQuestion(generated)
                   })
                 }}
-                className="rounded-md bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-500"
+                className="rounded-md bg-error px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 transition"
               >
                 Regenerate
               </button>
               <button
                 onClick={handleSkip}
-                className="rounded-md border border-red-300 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50"
+                className="rounded-md border border-error px-3 py-1.5 text-xs font-medium text-error hover:bg-error-muted transition"
               >
                 Skip this question
               </button>
@@ -273,13 +273,13 @@ export default function QuizSessionPage() {
         {question && !isLoading && (
           <>
             {/* QUIZ-01: Question display with clear formatting — always visible */}
-            <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-6">
+            <div className="rounded-lg bg-surface border border-border p-6">
               <QuestionDisplay question={question} />
             </div>
 
             {/* Evaluation result panel — shown after successful evaluation */}
             {evaluation && (
-              <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-6">
+              <div className="rounded-lg bg-surface border border-border p-6">
                 <EvaluationResult
                   evaluation={evaluation}
                   onNext={handleNext}
@@ -290,13 +290,13 @@ export default function QuizSessionPage() {
 
             {/* Evaluation loading state — shown while LLM is evaluating */}
             {evaluating && (
-              <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-8">
-                <div className="flex flex-col items-center gap-3 text-gray-400">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+              <div className="rounded-lg bg-surface border border-border p-8">
+                <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                   {elapsedSeconds < 20 ? (
                     <p className="text-sm">Evaluating your answer...</p>
                   ) : (
-                    <p className="text-sm text-amber-600">Still evaluating... (taking longer than usual)</p>
+                    <p className="text-sm text-warning">Still evaluating... (taking longer than usual)</p>
                   )}
                 </div>
               </div>
@@ -304,12 +304,12 @@ export default function QuizSessionPage() {
 
             {/* Evaluation error state — shown after failed evaluation (all retries exhausted) */}
             {evalError && !evaluating && !evaluation && (
-              <div className="rounded-lg bg-red-50 border border-red-200 p-6 space-y-3">
-                <p className="text-sm text-red-700 font-medium">Evaluation failed</p>
-                <p className="text-xs text-red-600">{evalError}</p>
+              <div className="rounded-lg bg-error-muted border border-error p-6 space-y-3">
+                <p className="text-sm text-error font-medium">Evaluation failed</p>
+                <p className="text-xs text-error">{evalError}</p>
                 <button
                   onClick={handleRetry}
-                  className="rounded-md bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-500"
+                  className="rounded-md bg-error px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 transition"
                 >
                   Retry
                 </button>
@@ -318,8 +318,8 @@ export default function QuizSessionPage() {
 
             {/* QUIZ-02 + QUIZ-03: Answer input — hidden after evaluation or during evaluation */}
             {!evaluation && !evaluating && (
-              <div className="rounded-lg bg-white border border-gray-200 shadow-sm p-6">
-                <h3 className="text-sm font-semibold text-gray-700 mb-4">Your Answer</h3>
+              <div className="rounded-lg bg-surface border border-border p-6">
+                <h3 className="text-sm font-semibold text-foreground mb-4">Your Answer</h3>
                 <AnswerInput
                   question={question}
                   onSubmit={handleSubmit}
