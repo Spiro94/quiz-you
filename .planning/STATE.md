@@ -38,6 +38,7 @@ Progress: [█████████████░░] 87% (Phase 5 in progre
 - Trend: Design-matching plans take longer due to checkpoint iteration cycles reading .pen file
 
 *Updated after each plan completion*
+| Phase 05 P02 | 43 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -120,6 +121,10 @@ Recent decisions affecting current work:
 - **[05-03]** scoreToColor() in PerTopicAccuracy uses hex values for SVG Cell fill; getScoreColor() in recommendations.ts uses Tailwind token classes for DOM text — dual approach serves both contexts
 - **[05-03]** getScoreColor returns text-success/text-accent/text-warning/text-error; getScoreBgColor returns bg-success-muted/bg-primary-muted/bg-warning-muted/bg-error-muted — propagates to all callers
 - **[05-03]** FilterBar active topic chips use bg-primary-muted border-primary text-primary (not solid bg-primary) — consistent with quiz-you.pen muted pattern for selected states
+- [Phase 05-02]: 2-column full-height quiz layout — .pen Screen/Question defines qLeft (fill) + qRight (580px fixed) split, not a scrolling single column
+- [Phase 05-02]: onCancel prop on QuizSetupForm — form component has no router access; page owns navigation; prop callback keeps component presentational
+- [Phase 05-02]: feedbackMode prop on QuestionDisplay — same component renders at 16px 500 muted in feedback context vs 20px 600 foreground in question context
+- [Phase 05-02]: Quiz wizard uses manual useState (not react-hook-form) — chip/segmented/stepper controls cannot be driven by register() without custom controller wiring
 
 ### Pending Todos
 
