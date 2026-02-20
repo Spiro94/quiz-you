@@ -37,6 +37,7 @@ Progress: [███████████████] 100% (PROJECT COMPLETE
 - Trend: Auto tasks execute fast; human verification checkpoints dominate wall-clock time
 
 *Updated after each plan completion*
+| Phase 05 P01 | 2 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -109,6 +110,8 @@ Recent decisions affecting current work:
 - **[04-04]** Recharts Tooltip formatter typed as (value: number | undefined) — Recharts v2 types require optional value to handle missing data points
 - **[04-04]** Horizontal BarChart layout for topic accuracy — topic names are long strings; horizontal bars avoid label truncation
 - **[04-04]** Default difficulty 'normal' for recommendation — session_summaries has no difficulty field; v1 simplification per RESEARCH.md
+- [Phase 05-01]: Tailwind v4 @theme block in CSS is the only token registration method — tailwind.config.ts is v3 only
+- [Phase 05-01]: Google Fonts import placed BEFORE @import tailwindcss so body font-family resolves in @layer base
 
 ### Pending Todos
 
