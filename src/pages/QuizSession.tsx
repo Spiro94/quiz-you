@@ -97,11 +97,11 @@ export default function QuizSessionPage() {
   useEffect(() => {
     if (!session || !sessionRow) return
     if (isSessionComplete()) {
-      // Mark session completed in DB (COMP-01, DATA-01)
+      // Mark session completed in DB and insert session_summaries row (COMP-01, DATA-01)
       completeQuizSession(session.sessionId).catch(() => {
         // Best-effort — navigate even if DB update fails
       })
-      navigate('/dashboard')
+      navigate(`/session/${session.sessionId}/summary`)
       return
     }
 

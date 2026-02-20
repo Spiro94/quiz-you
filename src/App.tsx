@@ -8,6 +8,7 @@ import SignupPage from './pages/Signup'
 import DashboardPage from './pages/Dashboard'
 import QuizSetupPage from './pages/QuizSetup'
 import QuizSessionPage from './pages/QuizSession'
+import SessionSummaryPage from './pages/SessionSummary'
 
 function App() {
   return (
@@ -40,6 +41,15 @@ function App() {
                 <QuizProvider>
                   <QuizSessionPage />
                 </QuizProvider>
+              </ProtectedRoute>
+            }
+          />
+          {/* Session summary route — post-quiz outcome screen (COMP-02 through COMP-05) */}
+          <Route
+            path="/session/:sessionId/summary"
+            element={
+              <ProtectedRoute>
+                <SessionSummaryPage />
               </ProtectedRoute>
             }
           />
