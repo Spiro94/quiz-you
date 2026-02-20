@@ -202,8 +202,8 @@ export function QuizSetupForm({ onSubmit, onCancel, error }: QuizSetupFormProps)
               <div className="flex rounded-lg bg-elevated border border-border overflow-hidden">
                 {([
                   { value: 'beginner' as Difficulty, label: 'Beginner', dotClass: 'bg-success', activeClass: 'bg-success-muted text-success' },
-                  { value: 'normal' as Difficulty, label: 'Normal', dotClass: 'bg-muted-foreground', activeClass: 'bg-subtle text-muted-foreground' },
-                  { value: 'advanced' as Difficulty, label: 'Advanced', dotClass: 'bg-muted-foreground', activeClass: 'bg-subtle text-muted-foreground' },
+                  { value: 'normal' as Difficulty, label: 'Normal', dotClass: 'bg-warning', activeClass: 'bg-warning-muted text-warning' },
+                  { value: 'advanced' as Difficulty, label: 'Advanced', dotClass: 'bg-primary', activeClass: 'bg-primary-muted text-primary' },
                 ]).map(({ value, label, dotClass, activeClass }) => {
                   const active = difficulty === value
                   return (
