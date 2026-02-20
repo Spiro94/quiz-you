@@ -106,9 +106,11 @@ export async function completeQuizSession(sessionId: string): Promise<void> {
   const answerRows = answers ?? []
   const completed = answerRows.filter(a => a.status === 'completed')
   const skipped = answerRows.filter(a => a.status === 'skipped')
+  // Final score includes ALL answers: completed (with their scores) + skipped (counted as 0).
+  // Ensures skipping doesn't artificially boost the average.
   const finalScore =
-    completed.length > 0
-      ? Math.round(completed.reduce((sum, a) => sum + (a.score ?? 0), 0) / completed.length)
+    answerRows.length > 0
+      ? Math.round(answerRows.reduce((sum, a) => sum + (a.score ?? 0), 0) / answerRows.length)
       : 0
 
   const durationSeconds = Math.floor(

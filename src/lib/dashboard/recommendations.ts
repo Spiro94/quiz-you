@@ -28,9 +28,12 @@ export function computeSessionSummary(
   const completed = answers.filter(a => a.status === 'completed')
   const skipped = answers.filter(a => a.status === 'skipped')
 
+  // Final score includes ALL answers: completed (with their scores) + skipped (counted as 0)
+  // This ensures skipping questions doesn't artificially boost the average.
+  // E.g., 1 answer at 80 + 4 skipped = (80 + 0 + 0 + 0 + 0) / 5 = 16
   const finalScore =
-    completed.length > 0
-      ? Math.round(completed.reduce((sum, a) => sum + (a.score ?? 0), 0) / completed.length)
+    answers.length > 0
+      ? Math.round(answers.reduce((sum, a) => sum + (a.score ?? 0), 0) / answers.length)
       : 0
 
   // Group completed answers by topic.
