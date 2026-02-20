@@ -11,14 +11,14 @@ export function ProgressIndicator({ current, total, percent }: ProgressIndicator
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-sm font-medium text-foreground">
           Question {current} of {total}
         </span>
-        <span className="text-xs text-gray-500">{percent}% complete</span>
+        <span className="text-xs text-muted-foreground">{percent}% complete</span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-subtle">
         <div
-          className="h-full rounded-full bg-blue-600 transition-all duration-300"
+          className="h-full rounded-full bg-primary transition-all duration-300"
           style={{ width: `${percent}%` }}
           role="progressbar"
           aria-valuenow={percent}

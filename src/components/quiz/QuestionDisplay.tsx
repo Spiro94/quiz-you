@@ -25,8 +25,8 @@ export function QuestionDisplay({ question }: QuestionDisplayProps) {
 
   const typeLabel = question.type === 'coding' ? 'Coding Problem' : 'Theoretical'
   const typeBadgeClass = question.type === 'coding'
-    ? 'bg-purple-50 border-purple-200 text-purple-700'
-    : 'bg-green-50 border-green-200 text-green-700'
+    ? 'bg-primary-muted border-primary text-primary'
+    : 'bg-success-muted border-success text-success'
 
   return (
     <div className="space-y-4">
@@ -35,29 +35,29 @@ export function QuestionDisplay({ question }: QuestionDisplayProps) {
         <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${typeBadgeClass}`}>
           {typeLabel}
         </span>
-        <span className="inline-flex items-center rounded-full bg-gray-100 border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+        <span className="inline-flex items-center rounded-full bg-subtle border border-border px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
           {question.topic}
         </span>
-        <span className="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2.5 py-0.5 text-xs font-medium text-amber-700 capitalize">
+        <span className="inline-flex items-center rounded-full bg-warning-muted border border-warning px-2.5 py-0.5 text-xs font-medium text-warning capitalize">
           {question.difficulty}
         </span>
       </div>
 
       {/* Question title */}
-      <h2 className="text-lg font-semibold text-gray-900 leading-snug">
+      <h2 className="text-lg font-semibold text-foreground leading-snug">
         {question.title}
       </h2>
 
       {/* Question body — markdown rendered */}
       {/* Safe: markdown-it with html: false escapes all raw HTML from LLM before rendering */}
       <div
-        className="prose prose-sm max-w-none text-gray-700 prose-code:bg-gray-100 prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-purple-700 prose-code:font-mono prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:text-sm [&_pre]:whitespace-pre-wrap [&_code]:break-words"
+        className="prose prose-sm max-w-none text-muted-foreground prose-code:bg-code-bg prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-primary prose-code:font-mono prose-pre:bg-code-bg prose-pre:text-foreground prose-pre:border prose-pre:border-code-border prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:text-sm [&_pre]:whitespace-pre-wrap [&_code]:break-words"
         dangerouslySetInnerHTML={{ __html: renderedBody }}
       />
 
       {/* Expected format hint */}
       {question.expectedFormat && (
-        <p className="text-xs text-gray-500 italic">
+        <p className="text-xs text-muted-foreground italic">
           Expected format: {question.expectedFormat}
         </p>
       )}

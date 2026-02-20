@@ -48,9 +48,9 @@ export function AnswerInput({ question, onSubmit, onSkip, isSubmitting = false }
     <div className="space-y-4">
       {/* Answer input area */}
       {question.type === 'coding' ? (
-        <div className="rounded-md overflow-hidden border border-gray-300">
+        <div className="rounded-md overflow-hidden border border-code-border">
           <Suspense fallback={
-            <div className="h-64 flex items-center justify-center bg-gray-900 text-gray-400 text-sm">
+            <div className="h-64 flex items-center justify-center bg-code-bg text-muted-foreground text-sm">
               Loading editor...
             </div>
           }>
@@ -85,23 +85,23 @@ export function AnswerInput({ question, onSubmit, onSkip, isSubmitting = false }
               handleSubmit()
             }
           }}
-          className="w-full rounded-md border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+          className="w-full rounded-lg border border-border bg-elevated text-foreground placeholder:text-placeholder p-4 font-mono text-sm resize-none focus:ring-2 focus:ring-primary focus:border-primary outline-none transition min-h-[200px]"
         />
       )}
 
       {/* Action buttons */}
-      <div className="flex items-center gap-3">
+      <div className="flex gap-3">
         <button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className="flex-1 rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex-1 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           {isSubmitting ? 'Submitting...' : 'Submit Answer'}
         </button>
         <button
           onClick={onSkip}
           disabled={isSubmitting}
-          className="rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex-1 rounded-md bg-subtle border border-border px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-elevated focus:outline-none focus:ring-2 focus:ring-border transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Skip
         </button>
@@ -109,7 +109,7 @@ export function AnswerInput({ question, onSubmit, onSkip, isSubmitting = false }
 
       {/* Keyboard hint for theoretical questions */}
       {question.type === 'theoretical' && (
-        <p className="text-xs text-gray-400 text-right">Ctrl+Enter to submit</p>
+        <p className="text-xs text-muted-foreground text-right">Ctrl+Enter to submit</p>
       )}
     </div>
   )

@@ -13,10 +13,10 @@ interface EvaluationResultProps {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 85) return 'text-green-600'
-  if (score >= 70) return 'text-blue-600'
-  if (score >= 50) return 'text-yellow-600'
-  return 'text-red-600'
+  if (score >= 85) return 'text-success'
+  if (score >= 70) return 'text-accent'
+  if (score >= 50) return 'text-warning'
+  return 'text-error'
 }
 
 function getScoreLabel(score: number): string {
@@ -34,26 +34,26 @@ export function EvaluationResult({ evaluation, onNext, isLastQuestion }: Evaluat
         <div className={`text-6xl font-bold tabular-nums ${getScoreColor(evaluation.score)}`}>
           {evaluation.score}
         </div>
-        <div className="text-sm text-gray-500 mt-1">out of 100</div>
+        <div className="text-sm text-muted-foreground mt-1">out of 100</div>
         <div className={`text-base font-medium mt-2 ${getScoreColor(evaluation.score)}`}>
           {getScoreLabel(evaluation.score)}
         </div>
       </div>
 
       {/* Feedback */}
-      <div className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-4">
-        <h3 className="text-sm font-semibold text-blue-900 mb-2">Feedback</h3>
+      <div className="rounded-lg border-l-4 border-primary bg-primary-muted p-4">
+        <h3 className="text-sm font-semibold text-foreground mb-2">Feedback</h3>
         <div
-          className="prose prose-sm max-w-none text-blue-800 prose-code:bg-blue-100 prose-pre:overflow-x-auto"
+          className="prose prose-sm max-w-none text-foreground prose-code:bg-code-bg prose-pre:overflow-x-auto"
           dangerouslySetInnerHTML={{ __html: md.render(evaluation.feedback) }}
         />
       </div>
 
       {/* Model Answer */}
-      <div className="rounded-lg border-l-4 border-green-500 bg-green-50 p-4">
-        <h3 className="text-sm font-semibold text-green-900 mb-2">Model Answer</h3>
+      <div className="rounded-lg border-l-4 border-success bg-success-muted p-4">
+        <h3 className="text-sm font-semibold text-foreground mb-2">Model Answer</h3>
         <div
-          className="prose prose-sm max-w-none text-green-800 prose-code:bg-green-100 prose-pre:overflow-x-auto [&_pre]:whitespace-pre-wrap [&_code]:break-words"
+          className="prose prose-sm max-w-none text-foreground prose-code:bg-code-bg prose-pre:overflow-x-auto [&_pre]:whitespace-pre-wrap [&_code]:break-words"
           dangerouslySetInnerHTML={{ __html: md.render(evaluation.modelAnswer) }}
         />
       </div>
@@ -61,7 +61,7 @@ export function EvaluationResult({ evaluation, onNext, isLastQuestion }: Evaluat
       {/* Navigation */}
       <button
         onClick={onNext}
-        className="w-full rounded-md bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+        className="w-full rounded-md bg-primary px-4 py-3 text-sm font-semibold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background transition"
       >
         {isLastQuestion ? 'Finish Quiz' : 'Next Question'}
       </button>
