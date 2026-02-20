@@ -189,7 +189,7 @@ Phase 4: 11 requirements
 **Plans:** 1/3 plans executed
 
 Plans:
-- [ ] 05-01-PLAN.md — Token extraction (@theme CSS config) + Auth flow redesign (Login, Signup, DashboardHeader)
+- [x] 05-01-PLAN.md — Token extraction (@theme CSS config) + Auth flow redesign (Login, Signup, LoginForm, SignupForm, LogoutButton, DashboardHeader) — APPROVED 2026-02-20
 - [ ] 05-02-PLAN.md — Quiz flow redesign (QuizSetup, QuizSession, QuestionDisplay, AnswerInput, ProgressIndicator, EvaluationResult, TopicBadge)
 - [ ] 05-03-PLAN.md — Dashboard flow redesign (SessionHistoryList, FilterBar, Recharts dark theme, NextQuizRecommendation, EmptyState, SessionSummary, SessionDetail)
 
@@ -221,5 +221,6 @@ No parallel work on the critical path. Each phase unblocks the next.
 | 2. Quiz Setup & Question Generation | 4/4 | Complete   | 2026-02-19 |
 | 3. Answer Evaluation & Scoring | 4/4 | Complete    | 2026-02-19 |
 | 4. Dashboard & Analytics | 4/4 | Complete   | 2026-02-20 |
+| 5. UI Redesign with quiz-you.pen | 1/3 | In Progress|  |
 
-**PROJECT STATUS: All 4 phases complete. 35/35 v1 requirements satisfied. Ready for launch.**
+**v1 STATUS: All 35 requirements satisfied. Phase 5 is visual polish — in progress.**

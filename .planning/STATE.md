@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-17)
 
 **Core value:** Developers can practice interviews in their spare time with realistic LLM-driven questions so they can be ready for any job interview or internal assessments at the company they're currently working at.
-**Current focus:** PROJECT COMPLETE — all 4 phases delivered, 35/35 requirements satisfied, ready for launch
+**Current focus:** Phase 5 — UI Redesign with quiz-you.pen. Plan 05-01 complete (auth flow). Plans 05-02 (quiz flow) and 05-03 (dashboard flow) remaining.
 
 ## Current Position
 
-Phase: 4 of 4 (Dashboard & Analytics) — COMPLETE
-Plan: 4 of 4 in current phase — COMPLETE
-Status: Phase 4 complete — 04-01, 04-02, 04-03, 04-04 all delivered and verified. All 11 Phase 4 requirements satisfied (COMP-02-05, DASH-01-07). All 35 v1 requirements shipped.
-Last activity: 2026-02-20 — Phase 4 human-verify checkpoint APPROVED. Recharts analytics, session summaries, dashboard history, session detail view, and aggregation layer complete. All requirements verified in browser.
+Phase: 5 of 5 (UI Redesign with quiz-you.pen) — In Progress
+Plan: 1 of 3 in current phase — COMPLETE
+Status: 05-01 complete and APPROVED — token system (@theme), Login two-column layout, Signup two-column layout, LoginForm, SignupForm, LogoutButton, DashboardHeader all match quiz-you.pen.
+Last activity: 2026-02-20 — Plan 05-01 human-verify checkpoint APPROVED. Auth flow dark mode verified in browser. Ready for 05-02 (quiz flow redesign).
 
-Progress: [███████████████] 100% (PROJECT COMPLETE — all phases delivered)
+Progress: [████████████░░░] 80% (Phase 5 in progress — 1/3 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 22 min
-- Total execution time: 221 min
+- Total plans completed: 11
+- Average duration: ~24 min
+- Total execution time: ~266 min
 
 **By Phase:**
 
@@ -30,14 +30,14 @@ Progress: [███████████████] 100% (PROJECT COMPLETE
 | 1. Auth & Foundation | 3/3 COMPLETE | 161 min | 54 min |
 | 2. Quiz Setup & Q Gen | 4/4 COMPLETE | 76 min | 19 min |
 | 3. Eval & Scoring | 4/4 COMPLETE | 48 min | 12 min |
-| 4. Dashboard & Analytics | 4/4 (human-verify pending) | ~23 min | ~6 min |
+| 4. Dashboard & Analytics | 4/4 COMPLETE | ~23 min | ~6 min |
+| 5. UI Redesign | 1/3 COMPLETE | ~45 min | ~45 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-04 (43 min incl. human-verify), 04-01 (2 min), 04-02 (5 min), 04-03 (1 min), 04-04 (~15 min auto)
-- Trend: Auto tasks execute fast; human verification checkpoints dominate wall-clock time
+- Last 5 plans: 04-01 (2 min), 04-02 (5 min), 04-03 (1 min), 04-04 (~15 min), 05-01 (~45 min incl. 3 checkpoint iterations)
+- Trend: Design-matching plans take longer due to checkpoint iteration cycles reading .pen file
 
 *Updated after each plan completion*
-| Phase 05 P01 | 2 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -110,8 +110,12 @@ Recent decisions affecting current work:
 - **[04-04]** Recharts Tooltip formatter typed as (value: number | undefined) — Recharts v2 types require optional value to handle missing data points
 - **[04-04]** Horizontal BarChart layout for topic accuracy — topic names are long strings; horizontal bars avoid label truncation
 - **[04-04]** Default difficulty 'normal' for recommendation — session_summaries has no difficulty field; v1 simplification per RESEARCH.md
-- [Phase 05-01]: Tailwind v4 @theme block in CSS is the only token registration method — tailwind.config.ts is v3 only
-- [Phase 05-01]: Google Fonts import placed BEFORE @import tailwindcss so body font-family resolves in @layer base
+- **[05-01]** Tailwind v4 @theme block in CSS is the only token registration method — tailwind.config.ts is v3 only; does not exist in this project
+- **[05-01]** Google Fonts import placed BEFORE @import tailwindcss — if placed after, custom font is unavailable when Tailwind processes @layer base
+- **[05-01]** `a { color: inherit }` in @layer base — browser default <a> color has equal specificity to Tailwind utilities; inherit ensures token classes (text-primary, text-accent) always win
+- **[05-01]** quiz-you.pen has no Screen/Signup — Signup page mirrors Screen/Login left panel identically; auth card adapts for signup context
+- **[05-01]** Auth card title/subtitle live inside LoginForm/SignupForm (not page wrapper) — matches quiz-you.pen authCard where header is part of the card structure
+- **[05-01]** Footer links use text-primary (purple) not text-accent (cyan) — quiz-you.pen authFooterLink uses $--primary; accent is reserved for different semantic use
 
 ### Pending Todos
 
@@ -129,6 +133,6 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-20
-Completed: Phase 4-04-PLAN.md — human verification checkpoint APPROVED. All 4 Phase 4 plans complete. All 35 v1 requirements satisfied. Project ready for launch.
+Completed: 05-01-PLAN.md — human-verify checkpoint APPROVED. Token system + full auth flow (Login two-column, Signup two-column, LoginForm, SignupForm, LogoutButton, DashboardHeader) match quiz-you.pen Screen/Login design.
 Resume file: None
-Status: PROJECT COMPLETE
+Status: Phase 5 in progress — next plan is 05-02 (quiz flow redesign)
