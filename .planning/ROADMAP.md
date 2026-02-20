@@ -184,12 +184,14 @@ Phase 4: 11 requirements
 
 ### Phase 5: UI Redesign with quiz-you.pen
 
-**Goal:** [To be planned]
+**Goal:** Apply quiz-you.pen design system (dark mode, purple/cyan accents, 23 design tokens) to all 7 user-facing pages and 20+ components for visual consistency and polish. No new functionality — visual-only redesign.
 **Depends on:** Phase 4
-**Plans:** 0 plans
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 5 to break down)
+- [ ] 05-01-PLAN.md — Token extraction (@theme CSS config) + Auth flow redesign (Login, Signup, DashboardHeader)
+- [ ] 05-02-PLAN.md — Quiz flow redesign (QuizSetup, QuizSession, QuestionDisplay, AnswerInput, ProgressIndicator, EvaluationResult, TopicBadge)
+- [ ] 05-03-PLAN.md — Dashboard flow redesign (SessionHistoryList, FilterBar, Recharts dark theme, NextQuizRecommendation, EmptyState, SessionSummary, SessionDetail)
 
 ---
 
