@@ -9,6 +9,7 @@ import DashboardPage from './pages/Dashboard'
 import QuizSetupPage from './pages/QuizSetup'
 import QuizSessionPage from './pages/QuizSession'
 import SessionSummaryPage from './pages/SessionSummary'
+import SessionDetailPage from './pages/SessionDetail'
 
 function App() {
   return (
@@ -50,6 +51,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <SessionSummaryPage />
+              </ProtectedRoute>
+            }
+          />
+          {/* Session detail route — all Q/A/feedback for a past session (DASH-03) */}
+          <Route
+            path="/session/:sessionId/detail"
+            element={
+              <ProtectedRoute>
+                <SessionDetailPage />
               </ProtectedRoute>
             }
           />
