@@ -1,6 +1,7 @@
 // src/pages/QuizSetup.tsx
 // Quiz setup page: renders QuizSetupForm, handles session creation and navigation.
-// On valid form submit: calls createQuizSession(), navigates to /quiz/:sessionId.
+// Layout matches .pen wizardWrap: bg-background, centered, 680px wide, gap 32.
+// The QuizSetupForm itself renders the step indicator and wizard card.
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -26,18 +27,11 @@ export default function QuizSetupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-2xl px-4 py-12">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-foreground">Configure Your Quiz</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Select your topics, difficulty, and format, then start your session.
-          </p>
-        </div>
-
-        <div className="rounded-lg bg-surface border border-border p-6">
-          <QuizSetupForm onSubmit={handleSubmit} error={error} />
-        </div>
+    // .pen Screen/Quiz-Setup-1: fill background, vertical, justifyContent center, alignItems center
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
+      {/* .pen wizardWrap: width 680, vertical layout, gap 32 */}
+      <div className="w-full" style={{ maxWidth: 680 }}>
+        <QuizSetupForm onSubmit={handleSubmit} error={error} />
       </div>
     </div>
   )
