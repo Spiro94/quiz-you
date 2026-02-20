@@ -51,13 +51,13 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
   const hasFilters = selectedTopics.length > 0 || dateStart || dateEnd
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+    <div className="bg-surface rounded-lg border border-border p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-gray-700">Filter Sessions</h3>
+        <h3 className="text-sm font-semibold text-foreground">Filter Sessions</h3>
         {hasFilters && (
           <button
             onClick={clearFilters}
-            className="text-xs text-blue-600 hover:underline"
+            className="text-xs text-accent hover:underline"
           >
             Clear filters
           </button>
@@ -67,28 +67,28 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
       {/* Date range */}
       <div className="flex gap-3 items-center">
         <div className="flex-1">
-          <label className="block text-xs text-gray-500 mb-1">From</label>
+          <label className="block text-xs text-muted-foreground mb-1">From</label>
           <input
             type="date"
             value={dateStart}
             onChange={e => handleDateChange('start', e.target.value)}
-            className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm"
+            className="w-full border border-border rounded px-2 py-1.5 text-sm bg-elevated text-foreground focus:ring-2 focus:ring-primary focus:border-primary outline-none"
           />
         </div>
         <div className="flex-1">
-          <label className="block text-xs text-gray-500 mb-1">To</label>
+          <label className="block text-xs text-muted-foreground mb-1">To</label>
           <input
             type="date"
             value={dateEnd}
             onChange={e => handleDateChange('end', e.target.value)}
-            className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm"
+            className="w-full border border-border rounded px-2 py-1.5 text-sm bg-elevated text-foreground focus:ring-2 focus:ring-primary focus:border-primary outline-none"
           />
         </div>
       </div>
 
       {/* Topic chips */}
       <div>
-        <p className="text-xs text-gray-500 mb-2">Topics</p>
+        <p className="text-xs text-muted-foreground mb-2">Topics</p>
         <div className="flex flex-wrap gap-2">
           {AVAILABLE_TOPICS.map(topic => (
             <button
@@ -96,8 +96,8 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
               onClick={() => toggleTopic(topic)}
               className={`px-2 py-1 rounded-full text-xs font-medium transition-colors ${
                 selectedTopics.includes(topic)
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-primary-muted border border-primary text-primary'
+                  : 'bg-elevated text-muted-foreground hover:bg-subtle hover:text-foreground'
               }`}
             >
               {topic}

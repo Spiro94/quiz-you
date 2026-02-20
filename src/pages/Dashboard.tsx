@@ -46,14 +46,14 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <DashboardHeader />
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900">Your Sessions</h1>
+          <h1 className="text-xl font-bold text-foreground">Your Sessions</h1>
           <Link
             to="/quiz/setup"
-            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            className="bg-primary hover:bg-primary-hover text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
           >
             New Quiz
           </Link>
@@ -71,8 +71,8 @@ export default function DashboardPage() {
         />
 
         {/* Analytics section */}
-        <div className="space-y-4 pt-4 border-t border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900">Analytics</h2>
+        <div className="space-y-4 pt-4 border-t border-border">
+          <h2 className="text-lg font-bold text-foreground">Analytics</h2>
           <NextQuizRecommendation />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <PerTopicAccuracy />

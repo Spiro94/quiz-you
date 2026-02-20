@@ -76,18 +76,18 @@ export function computeSessionSummary(
   }
 }
 
-// getScoreColor: consistent color tiers (>=85 green, >=70 blue, >=50 yellow, <50 red).
-// Established in Phase 3 EvaluationResult component — reused here for consistency.
+// getScoreColor: consistent color tiers using design tokens (>=85 success, >=70 accent, >=50 warning, <50 error).
+// Updated Phase 5 Plan 03 to use quiz-you.pen design system tokens.
 export function getScoreColor(score: number): string {
-  if (score >= 85) return 'text-green-600'
-  if (score >= 70) return 'text-blue-600'
-  if (score >= 50) return 'text-yellow-600'
-  return 'text-red-600'
+  if (score >= 85) return 'text-success'
+  if (score >= 70) return 'text-accent'
+  if (score >= 50) return 'text-warning'
+  return 'text-error'
 }
 
 export function getScoreBgColor(score: number): string {
-  if (score >= 85) return 'bg-green-100 border-green-200'
-  if (score >= 70) return 'bg-blue-100 border-blue-200'
-  if (score >= 50) return 'bg-yellow-100 border-yellow-200'
-  return 'bg-red-100 border-red-200'
+  if (score >= 85) return 'bg-success-muted'
+  if (score >= 70) return 'bg-primary-muted'
+  if (score >= 50) return 'bg-warning-muted'
+  return 'bg-error-muted'
 }

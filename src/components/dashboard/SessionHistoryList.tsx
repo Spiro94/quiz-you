@@ -34,7 +34,7 @@ export function SessionHistoryList({
     return (
       <div className="space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-16 bg-gray-200 rounded animate-pulse" />
+          <div key={i} className="h-16 bg-subtle rounded animate-pulse" />
         ))}
       </div>
     )
@@ -42,14 +42,14 @@ export function SessionHistoryList({
 
   if (sessions.length === 0 && page === 0) {
     return (
-      <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-        <p className="text-gray-500 text-lg">No sessions yet.</p>
-        <p className="text-gray-400 text-sm mt-1">
+      <div className="text-center py-12 bg-surface rounded-lg border border-border">
+        <p className="text-muted-foreground text-lg">No sessions yet.</p>
+        <p className="text-muted-foreground text-sm mt-1">
           Complete a quiz to see your history here.
         </p>
         <Link
           to="/quiz/setup"
-          className="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg"
+          className="mt-4 inline-block bg-primary hover:bg-primary-hover text-white text-sm font-medium px-4 py-2 rounded-lg"
         >
           Start a Quiz
         </Link>
@@ -62,14 +62,14 @@ export function SessionHistoryList({
       {sessions.map(row => (
         <div
           key={row.session_id}
-          className="block bg-white rounded-lg border border-gray-200 px-4 py-3 hover:border-blue-300 hover:shadow-sm transition-all"
+          className="block bg-surface rounded-lg border border-border px-4 py-3 hover:border-border-strong hover:bg-subtle transition-all"
         >
           <div className="flex items-center justify-between">
             <Link to={`/session/${row.session_id}/summary`} className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-gray-800 truncate">
+              <p className="text-sm font-medium text-foreground truncate">
                 {row.topics.join(', ')}
               </p>
-              <p className="text-xs text-gray-400 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 {format(new Date(row.created_at), 'MMM d, yyyy · h:mm a')}
                 {' · '}
                 {row.difficulty.charAt(0).toUpperCase() + row.difficulty.slice(1)}
@@ -80,7 +80,7 @@ export function SessionHistoryList({
             <div className="ml-4 flex-shrink-0 flex items-center gap-3">
               <Link
                 to={`/session/${row.session_id}/detail`}
-                className="text-xs text-blue-600 hover:underline"
+                className="text-xs text-accent hover:underline"
               >
                 Details
               </Link>
@@ -88,7 +88,7 @@ export function SessionHistoryList({
                 <span className={`text-2xl font-bold ${getScoreColor(row.final_score)}`}>
                   {row.final_score}
                 </span>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-muted-foreground">
                   {row.num_completed}&#10003; {row.num_skipped}&#8631;
                 </p>
               </div>
@@ -102,15 +102,15 @@ export function SessionHistoryList({
         <button
           onClick={onPrevPage}
           disabled={page === 0}
-          className="px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 text-sm border border-border rounded bg-surface hover:bg-subtle text-muted-foreground disabled:opacity-40 disabled:cursor-not-allowed transition"
         >
           &larr; Previous
         </button>
-        <span className="text-xs text-gray-400">Page {page + 1}</span>
+        <span className="text-xs text-muted-foreground">Page {page + 1}</span>
         <button
           onClick={onNextPage}
           disabled={sessions.length < pageSize}
-          className="px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 text-sm border border-border rounded bg-surface hover:bg-subtle text-muted-foreground disabled:opacity-40 disabled:cursor-not-allowed transition"
         >
           Next &rarr;
         </button>
