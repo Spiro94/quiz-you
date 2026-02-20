@@ -52,9 +52,9 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **DASH-01**: User sees dashboard after login showing recent quiz sessions
 - [x] **DASH-02**: Dashboard displays list of past sessions with session date, topics, score, and duration
 - [x] **DASH-03**: User can view details of any past session (all questions, answers, feedback, scores)
-- [ ] **DASH-04**: Dashboard shows per-topic accuracy breakdown (average score by technology/language)
-- [ ] **DASH-05**: Dashboard shows performance trends and progress over time
-- [ ] **DASH-06**: Dashboard recommends next quiz settings based on weak areas and recent performance
+- [x] **DASH-04**: Dashboard shows per-topic accuracy breakdown (average score by technology/language)
+- [x] **DASH-05**: Dashboard shows performance trends and progress over time
+- [x] **DASH-06**: Dashboard recommends next quiz settings based on weak areas and recent performance
 - [x] **DASH-07**: User can filter/search session history by date or topic
 
 ### Data Persistence & Reliability
@@ -159,9 +159,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-01 | Phase 4 | Complete |
 | DASH-02 | Phase 4 | Complete |
 | DASH-03 | Phase 4 | Complete |
-| DASH-04 | Phase 4 | Pending |
-| DASH-05 | Phase 4 | Pending |
-| DASH-06 | Phase 4 | Pending |
+| DASH-04 | Phase 4 | Complete |
+| DASH-05 | Phase 4 | Complete |
+| DASH-06 | Phase 4 | Complete |
 | DASH-07 | Phase 4 | Complete |
 
 **Coverage:**

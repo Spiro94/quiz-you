@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-17)
 
 **Core value:** Developers can practice interviews in their spare time with realistic LLM-driven questions so they can be ready for any job interview or internal assessments at the company they're currently working at.
-**Current focus:** Phase 4 — Dashboard & Analytics
+**Current focus:** Phase 4 COMPLETE — awaiting human verification checkpoint for Phase 4 analytics
 
 ## Current Position
 
 Phase: 4 of 4 (Dashboard & Analytics)
-Plan: 3 of 4 in current phase
-Status: Phase 4 in progress — 04-01, 04-02, 04-03 complete
-Last activity: 2026-02-20 — Completed 04-03: getSessionWithAnswers() single join query, useSessionDetail() hook, SessionDetailPage at /session/:sessionId/detail, Details link in SessionHistoryList. Also completed 04-02: sessions service, useSessions hook, FilterBar, SessionHistoryList, Dashboard update. Requirements DASH-01, DASH-02, DASH-03, DASH-07 complete.
+Plan: 4 of 4 in current phase — auto tasks COMPLETE, at human-verify checkpoint
+Status: Phase 4 auto tasks complete — 04-01, 04-02, 04-03, 04-04 (auto) done. Awaiting Task 3 human verification.
+Last activity: 2026-02-20 — Completed 04-04 auto tasks: Recharts install, getTopicAccuracy()/getPerformanceTrends()/computeRecommendation() aggregation functions, useTopicAccuracy/usePerformanceTrends React Query hooks, PerTopicAccuracy bar chart, PerformanceTrends line chart, NextQuizRecommendation card, Dashboard.tsx analytics section. Requirements DASH-04, DASH-05, DASH-06 implemented. At human-verify checkpoint.
 
-Progress: [██████████████░] 93% (Phase 4 in progress: 3/4 plans complete)
+Progress: [███████████████] 98% (Phase 4: all auto tasks complete, human-verify pending)
 
 ## Performance Metrics
 
@@ -30,10 +30,10 @@ Progress: [██████████████░] 93% (Phase 4 in progre
 | 1. Auth & Foundation | 3/3 COMPLETE | 161 min | 54 min |
 | 2. Quiz Setup & Q Gen | 4/4 COMPLETE | 76 min | 19 min |
 | 3. Eval & Scoring | 4/4 COMPLETE | 48 min | 12 min |
-| 4. Dashboard & Analytics | 3/4 | 8 min | 3 min |
+| 4. Dashboard & Analytics | 4/4 (human-verify pending) | ~23 min | ~6 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-04 (43 min incl. human-verify), 04-01 (2 min), 04-02 (5 min), 04-03 (1 min)
+- Last 5 plans: 03-04 (43 min incl. human-verify), 04-01 (2 min), 04-02 (5 min), 04-03 (1 min), 04-04 (~15 min auto)
 - Trend: Auto tasks execute fast; human verification checkpoints dominate wall-clock time
 
 *Updated after each plan completion*
@@ -100,6 +100,11 @@ Recent decisions affecting current work:
 - **[04-03]** Single .select() with nested quiz_questions() and quiz_answers() — avoids N+1 pitfall documented in RESEARCH.md
 - **[04-03]** Map<number, QuizAnswerRow> keyed by question_index — O(n) answer correlation, not O(n^2)
 - **[04-03]** staleTime: 10 minutes for session detail — data is immutable after session completes
+- **[04-04]** Explicit AnswerWithTopic type cast (as unknown as) for Supabase join query — Relationships:[] empty arrays cause join result to resolve as never in tsc
+- **[04-04]** In-memory topic grouping from quiz_answers + quiz_questions join — safe for v1 (<500 rows per RESEARCH.md), avoids Postgres GROUP BY complexity
+- **[04-04]** Recharts Tooltip formatter typed as (value: number | undefined) — Recharts v2 types require optional value to handle missing data points
+- **[04-04]** Horizontal BarChart layout for topic accuracy — topic names are long strings; horizontal bars avoid label truncation
+- **[04-04]** Default difficulty 'normal' for recommendation — session_summaries has no difficulty field; v1 simplification per RESEARCH.md
 
 ### Pending Todos
 
@@ -117,5 +122,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 04-03-PLAN.md — session detail view (2 auto tasks, 2 commits). Also completed 04-02-PLAN.md as prerequisite (4 commits total). SUMMARY at .planning/phases/04-dashboard-analytics/04-03-SUMMARY.md. Requirements DASH-01, DASH-02, DASH-03, DASH-07 complete. Next: Phase 4 Plan 04 (analytics: per-topic accuracy, trends, weak-area recommendation + human verify).
+Stopped at: 04-04-PLAN.md Task 3 — human verification checkpoint (checkpoint:human-verify). Auto tasks (1+2) complete with 2 commits. SUMMARY at .planning/phases/04-dashboard-analytics/04-04-SUMMARY.md. All auto tasks for Phase 4 complete. Awaiting human verification of all 11 Phase 4 requirements in browser.
 Resume file: None
