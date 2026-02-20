@@ -26,9 +26,9 @@ export function SignupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 bg-white rounded-lg shadow-md p-8">
+    <form onSubmit={handleSubmit} className="space-y-5 bg-surface rounded-lg border border-border p-8">
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-2">
           Email address
         </label>
         <input
@@ -38,12 +38,12 @@ export function SignupForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete="email"
-          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+          className="w-full px-4 py-2.5 border border-border rounded-lg bg-elevated text-foreground placeholder:text-placeholder focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
           placeholder="you@example.com"
         />
       </div>
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="password" className="block text-sm font-medium text-muted-foreground mb-2">
           Password
         </label>
         <input
@@ -54,26 +54,26 @@ export function SignupForm() {
           required
           minLength={8}
           autoComplete="new-password"
-          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+          className="w-full px-4 py-2.5 border border-border rounded-lg bg-elevated text-foreground placeholder:text-placeholder focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
           placeholder="••••••••"
         />
-        <p className="mt-1 text-xs text-gray-500">Minimum 8 characters</p>
+        <p className="mt-1 text-xs text-muted-foreground">Minimum 8 characters</p>
       </div>
       {error && (
-        <p role="alert" className="px-4 py-3 rounded-lg bg-red-50 text-red-700 text-sm border border-red-200">
+        <p role="alert" className="px-4 py-3 rounded-lg bg-error-muted text-error text-sm border border-error">
           {error}
         </p>
       )}
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed transition"
+        className="w-full py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition"
       >
         {loading ? 'Creating account...' : 'Create account'}
       </button>
-      <p className="text-center text-sm text-gray-600">
+      <p className="text-center text-sm text-muted-foreground">
         Already have an account?{' '}
-        <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+        <Link to="/login" className="text-accent hover:text-accent font-medium underline">
           Log in
         </Link>
       </p>
