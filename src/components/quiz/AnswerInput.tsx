@@ -1,16 +1,18 @@
 // src/components/quiz/AnswerInput.tsx
-// Conditional answer input: Monaco Editor for coding questions, textarea for theoretical.
-// Monaco is lazy-loaded to avoid bloating the initial bundle (~1.5MB).
-// Shows both Submit Answer and Skip buttons.
+// Right panel answer input — matches quiz-you.pen Screen/Question qRight layout.
+// Structure: "Your Answer" header → tab row → textarea (fill height) → bottom bar (word count + actions).
+// Tab row: Text Explanation (active: bg-surface border-border text-foreground) | Code (inactive: text-muted-foreground).
+// Textarea: bg-elevated, cornerRadius 10, border-border, padding 16, Inter font, fill height.
+// Bottom bar: word count left ("0 words" text-placeholder), Skip Question + Submit Answer right.
+// Coding mode: Monaco editor (vs-dark theme) with border-code-border wrapper — replaces textarea.
+// Monaco lazy-loaded (~1.5MB) to keep initial bundle small.
 import { lazy, Suspense, useRef, useState } from 'react'
 import type { GeneratedQuestion } from '../../types/quiz'
 
-// Lazy load Monaco to keep initial bundle small
 const MonacoEditor = lazy(() =>
   import('@monaco-editor/react').then(m => ({ default: m.default }))
 )
 
-// Map question topic to Monaco language identifier
 function inferLanguage(question: GeneratedQuestion): string {
   const topic = question.topic.toLowerCase()
   if (topic.includes('python')) return 'python'
@@ -35,82 +37,107 @@ export function AnswerInput({ question, onSubmit, onSkip, isSubmitting = false }
   const editorRef = useRef<{ getValue: () => string } | null>(null)
   const [textAnswer, setTextAnswer] = useState('')
 
+  const wordCount = textAnswer.trim() === '' ? 0 : textAnswer.trim().split(/\s+/).length
+
   const handleSubmit = () => {
     if (question.type === 'coding') {
-      const code = editorRef.current?.getValue() ?? ''
-      onSubmit(code)
+      onSubmit(editorRef.current?.getValue() ?? '')
     } else {
       onSubmit(textAnswer)
     }
   }
 
   return (
-    <div className="space-y-4">
-      {/* Answer input area */}
-      {question.type === 'coding' ? (
-        <div className="rounded-md overflow-hidden border border-code-border">
-          <Suspense fallback={
-            <div className="h-64 flex items-center justify-center bg-code-bg text-muted-foreground text-sm">
-              Loading editor...
-            </div>
-          }>
-            <MonacoEditor
-              height="320px"
-              language={inferLanguage(question)}
-              defaultValue={`// Write your solution here\n`}
-              onMount={(editor) => {
-                editorRef.current = editor
-              }}
-              theme="vs-dark"
-              options={{
-                minimap: { enabled: false },
-                fontSize: 14,
-                wordWrap: 'on',
-                lineNumbers: 'on',
-                scrollBeyondLastLine: false,
-                automaticLayout: true
-              }}
-            />
-          </Suspense>
-        </div>
-      ) : (
-        <textarea
-          value={textAnswer}
-          onChange={e => setTextAnswer(e.target.value)}
-          placeholder="Type your answer here... (Ctrl+Enter to submit)"
-          rows={8}
-          onKeyDown={e => {
-            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault()
-              handleSubmit()
-            }
-          }}
-          className="w-full rounded-lg border border-border bg-elevated text-foreground placeholder:text-placeholder p-4 font-mono text-sm resize-none focus:ring-2 focus:ring-primary focus:border-primary outline-none transition min-h-[200px]"
-        />
-      )}
+    // qRight inner: gap 20 between sections — flex column fill height
+    <div className="flex flex-col gap-5 h-full">
 
-      {/* Action buttons */}
-      <div className="flex gap-3">
-        <button
-          onClick={handleSubmit}
-          disabled={isSubmitting}
-          className="flex-1 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed transition"
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Answer'}
-        </button>
-        <button
-          onClick={onSkip}
-          disabled={isSubmitting}
-          className="flex-1 rounded-md bg-subtle border border-border px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-elevated focus:outline-none focus:ring-2 focus:ring-border transition disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Skip
-        </button>
+      {/* "Your Answer" header — .pen qAnswerHeader: 18px 700 foreground */}
+      <h2 className="text-[18px] font-bold text-foreground">Your Answer</h2>
+
+      {/* Tab row — .pen qTabRow: bg-elevated, cornerRadius 8, gap 4, padding 4 */}
+      <div className="flex rounded-lg bg-elevated p-1 gap-1">
+        <div className="flex-1 flex items-center justify-center rounded-md bg-surface border border-border py-[7px] px-3.5">
+          <span className="text-[13px] font-semibold text-foreground">
+            {question.type === 'coding' ? 'Code' : 'Text Explanation'}
+          </span>
+        </div>
+        <div className="flex-1 flex items-center justify-center py-[7px] px-3.5">
+          <span className="text-[13px] font-medium text-muted-foreground">
+            {question.type === 'coding' ? 'Explanation' : 'Code'}
+          </span>
+        </div>
       </div>
 
-      {/* Keyboard hint for theoretical questions */}
-      {question.type === 'theoretical' && (
-        <p className="text-xs text-muted-foreground text-right">Ctrl+Enter to submit</p>
-      )}
+      {/* Input area — grows to fill available space */}
+      <div className="flex-1 min-h-0">
+        {question.type === 'coding' ? (
+          // Monaco editor — .pen: has border, code-bg; use vs-dark theme matching code-bg token
+          <div className="rounded-[10px] overflow-hidden border border-code-border h-full min-h-[280px]">
+            <Suspense fallback={
+              <div className="h-full flex items-center justify-center bg-code-bg text-muted-foreground text-sm">
+                Loading editor...
+              </div>
+            }>
+              <MonacoEditor
+                height="100%"
+                language={inferLanguage(question)}
+                defaultValue={`// Write your solution here\n`}
+                onMount={(editor) => { editorRef.current = editor }}
+                theme="vs-dark"
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 14,
+                  wordWrap: 'on',
+                  lineNumbers: 'on',
+                  scrollBeyondLastLine: false,
+                  automaticLayout: true
+                }}
+              />
+            </Suspense>
+          </div>
+        ) : (
+          // Textarea — .pen qTextarea: bg-elevated, cornerRadius 10, border-border, padding 16, Inter, fill height
+          <textarea
+            value={textAnswer}
+            onChange={e => setTextAnswer(e.target.value)}
+            placeholder="Explain your understanding here. Be as detailed as possible — the AI evaluates based on accuracy, depth, and clarity of your explanation..."
+            onKeyDown={e => {
+              if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault()
+                handleSubmit()
+              }
+            }}
+            className="w-full h-full min-h-[280px] rounded-[10px] border border-border bg-elevated text-foreground placeholder:text-placeholder p-4 text-sm leading-relaxed resize-none focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
+            style={{ fontFamily: 'var(--font-sans, Inter, system-ui, sans-serif)', lineHeight: 1.6 }}
+          />
+        )}
+      </div>
+
+      {/* Bottom bar — .pen qBottomBar: space-between, word count left, actions right */}
+      <div className="flex items-center justify-between flex-shrink-0">
+        {/* Word count — .pen qWordCount: text-placeholder, 12px */}
+        <span className="text-xs text-placeholder">
+          {question.type === 'theoretical' ? `${wordCount} word${wordCount !== 1 ? 's' : ''}` : ''}
+        </span>
+
+        {/* Actions — .pen qBottomActions: gap 12, Skip (Secondary) + Submit (Primary) */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onSkip}
+            disabled={isSubmitting}
+            className="rounded-lg bg-elevated border border-border h-10 px-4 text-sm font-medium text-foreground hover:bg-subtle transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Skip Question
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+            className="rounded-lg bg-primary h-10 px-4 text-sm font-semibold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Answer'}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
