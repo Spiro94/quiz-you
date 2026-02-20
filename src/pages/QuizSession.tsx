@@ -4,6 +4,7 @@
 // Phase 3: wired to useAnswerEvaluation for full evaluation lifecycle.
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '../context/AuthContext'
 import { useQuizSession } from '../context/QuizContext'
 import { useQuestionGeneration } from '../hooks/useQuestionGeneration'
@@ -21,6 +22,7 @@ export default function QuizSessionPage() {
   const { sessionId } = useParams<{ sessionId: string }>()
   const { user } = useAuth()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const {
     session,
     initializeSession,
@@ -98,7 +100,12 @@ export default function QuizSessionPage() {
     if (!session || !sessionRow) return
     if (isSessionComplete()) {
       // Mark session completed in DB and insert session_summaries row (COMP-01, DATA-01)
-      completeQuizSession(session.sessionId).catch(() => {
+      completeQuizSession(session.sessionId).then(() => {
+        // Invalidate dashboard sessions cache so the new session appears immediately on return
+        if (user?.id) {
+          queryClient.invalidateQueries({ queryKey: ['sessions', user.id] })
+        }
+      }).catch(() => {
         // Best-effort — navigate even if DB update fails
       })
       navigate(`/session/${session.sessionId}/summary`)

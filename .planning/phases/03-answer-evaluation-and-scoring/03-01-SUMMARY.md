@@ -115,3 +115,14 @@ None - migration applied automatically via `supabase db push` during task execut
 ---
 *Phase: 03-answer-evaluation-and-scoring*
 *Completed: 2026-02-19*
+
+## Self-Check: PASSED
+
+- FOUND: supabase/migrations/20260219000000_quiz_answers.sql
+- FOUND: src/types/database.ts (quiz_answers definition + 3 type aliases)
+- FOUND: src/lib/quiz/answers.ts (4 functions exported)
+- FOUND: .planning/phases/03-answer-evaluation-and-scoring/03-01-SUMMARY.md
+- FOUND: fc4d8d9 (Task 1 commit)
+- FOUND: 79d8b59 (Task 2 commit)
+- FOUND: df356c0 (docs metadata commit)
+- TypeScript: npx tsc --noEmit = 0 errors
