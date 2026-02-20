@@ -156,6 +156,39 @@ export interface Database {
         }
         Relationships: []
       }
+      session_summaries: {
+        Row: {
+          session_id: string
+          user_id: string
+          topics: string[]
+          difficulty: 'beginner' | 'normal' | 'advanced'
+          question_count: number
+          final_score: number
+          num_completed: number
+          num_skipped: number
+          duration_seconds: number | null
+          created_at: string
+        }
+        Insert: {
+          session_id: string
+          user_id: string
+          topics: string[]
+          difficulty: 'beginner' | 'normal' | 'advanced'
+          question_count: number
+          final_score: number
+          num_completed: number
+          num_skipped: number
+          duration_seconds?: number | null
+          created_at?: string
+        }
+        Update: {
+          final_score?: number
+          num_completed?: number
+          num_skipped?: number
+          duration_seconds?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -177,3 +210,6 @@ export type TopicRow = Database['public']['Tables']['topics']['Row']
 export type QuizAnswerRow = Database['public']['Tables']['quiz_answers']['Row']
 export type QuizAnswerInsert = Database['public']['Tables']['quiz_answers']['Insert']
 export type QuizAnswerUpdate = Database['public']['Tables']['quiz_answers']['Update']
+
+export type SessionSummaryRow = Database['public']['Tables']['session_summaries']['Row']
+export type SessionSummaryInsert = Database['public']['Tables']['session_summaries']['Insert']
