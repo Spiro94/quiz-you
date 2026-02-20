@@ -1,7 +1,10 @@
 // src/pages/QuizSession.tsx
-// Quiz session page. Orchestrates: session fetch → question generation → display → skip/submit → loop.
-// Uses QuizContext (useQuizSession) for local session state and useQuestionGeneration for LLM calls.
-// Phase 3: wired to useAnswerEvaluation for full evaluation lifecycle.
+// Quiz session page redesigned to match quiz-you.pen Screen/Question and Screen/Feedback.
+// Layout: vertical fill — qTopBar (60px) + qBody (fill, horizontal) with qLeft (fill) + qRight (580px).
+// qTopBar: logo left, progress center (text + bar), score badge + skip right.
+// Question mode: qLeft shows question (meta badges, title 20px, code block), qRight shows answer panel.
+// Feedback mode: qLeft shows question+user answer, qRight shows score ring, AI feedback, model answer.
+// All logic (generation, evaluation, skip, complete) is unchanged.
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
@@ -12,11 +15,18 @@ import { useAnswerEvaluation } from '../hooks/useAnswerEvaluation'
 import { getQuizSession } from '../lib/quiz/sessions'
 import { completeQuizSession, insertSkippedAnswer } from '../lib/quiz/answers'
 import { QuestionDisplay } from '../components/quiz/QuestionDisplay'
-import { ProgressIndicator } from '../components/quiz/ProgressIndicator'
 import { AnswerInput } from '../components/quiz/AnswerInput'
 import { EvaluationResult } from '../components/quiz/EvaluationResult'
-import { TopicBadge } from '../components/quiz/TopicBadge'
 import type { QuizSessionRow } from '../types/database'
+
+// Zap icon — matches .pen qTopLogoIcon
+function ZapIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+  )
+}
 
 export default function QuizSessionPage() {
   const { sessionId } = useParams<{ sessionId: string }>()
@@ -40,11 +50,8 @@ export default function QuizSessionPage() {
   const [sessionRow, setSessionRow] = useState<QuizSessionRow | null>(null)
   const [fetchError, setFetchError] = useState<string | null>(null)
   const autoRequestedIndexRef = useRef<number | null>(null)
-
-  // Store last submitted answer for Retry button re-submission
   const lastAnswerRef = useRef<string>('')
 
-  // Current question for the hook — null-safe with a fallback
   const currentQuestion = session?.questions[session.currentQuestionIndex] ?? null
 
   const {
@@ -67,7 +74,6 @@ export default function QuizSessionPage() {
     questionId: null
   })
 
-  // isLastQuestion: true when current question is the final one in the session
   const isLastQuestion = session
     ? session.currentQuestionIndex >= session.totalQuestions - 1
     : false
@@ -75,13 +81,9 @@ export default function QuizSessionPage() {
   // Step 1: Fetch session from Supabase on mount
   useEffect(() => {
     if (!sessionId) return
-
     getQuizSession(sessionId)
       .then(row => {
-        if (!row) {
-          setFetchError('Quiz session not found.')
-          return
-        }
+        if (!row) { setFetchError('Quiz session not found.'); return }
         setSessionRow(row)
         initializeSession(row)
       })
@@ -90,38 +92,26 @@ export default function QuizSessionPage() {
       })
   }, [sessionId, initializeSession])
 
-  // Reset auto-generation guard when changing sessions.
   useEffect(() => {
     autoRequestedIndexRef.current = null
   }, [sessionId])
 
-  // Step 2: Generate first question when session is ready, then each subsequent question
+  // Step 2: Generate questions
   useEffect(() => {
     if (!session || !sessionRow) return
     if (isSessionComplete()) {
-      // Mark session completed in DB and insert session_summaries row (COMP-01, DATA-01)
       completeQuizSession(session.sessionId).then(() => {
-        // Invalidate dashboard sessions cache so the new session appears immediately on return
-        if (user?.id) {
-          queryClient.invalidateQueries({ queryKey: ['sessions', user.id] })
-        }
-      }).catch(() => {
-        // Best-effort — navigate even if DB update fails
-      })
+        if (user?.id) queryClient.invalidateQueries({ queryKey: ['sessions', user.id] })
+      }).catch(() => {})
       navigate(`/session/${session.sessionId}/summary`)
       return
     }
-
-    // Only generate if we haven't already generated a question for this index
     if (session.questions.length > session.currentQuestionIndex) {
       autoRequestedIndexRef.current = session.currentQuestionIndex
       return
     }
-
-    // Auto-generate at most once per index; retries are user-triggered via "Regenerate".
     if (autoRequestedIndexRef.current === session.currentQuestionIndex) return
     autoRequestedIndexRef.current = session.currentQuestionIndex
-
     const params = {
       topics: session.config.topics,
       difficulty: session.config.difficulty,
@@ -129,35 +119,29 @@ export default function QuizSessionPage() {
       sessionId: session.sessionId,
       questionIndex: session.currentQuestionIndex
     }
-
     generate(params, session.currentQuestionIndex).then(generated => {
       if (generated) addQuestion(generated)
     })
   }, [session, sessionRow, navigate, generate, addQuestion, isSessionComplete])
 
-  const handleSkip = () => {
-    // Clear any lingering error/evaluation state from previous question
-    resetEvaluation()
+  void user
 
-    // Persist skipped answer to DB (DATA-03 — no gaps in session history)
+  const handleSkip = () => {
+    resetEvaluation()
     if (session) {
       const currentQ = session.questions[session.currentQuestionIndex]
       insertSkippedAnswer({
         sessionId: session.sessionId,
         questionIndex: session.currentQuestionIndex,
         questionTitle: currentQ?.title
-      }).catch(() => {
-        // Best-effort — don't block quiz progress if DB write fails
-      })
+      }).catch(() => {})
     }
     skipQuestion()
   }
 
   const handleSubmit = async (answer: string) => {
-    // Store for retry if evaluation fails
     lastAnswerRef.current = answer
     await submitAnswer(answer)
-    // moveToNextQuestion() is called by EvaluationResult's onNext, not here
   }
 
   const handleNext = () => {
@@ -166,17 +150,12 @@ export default function QuizSessionPage() {
   }
 
   const handleRetry = () => {
-    if (lastAnswerRef.current) {
-      void submitAnswer(lastAnswerRef.current)
-    }
+    if (lastAnswerRef.current) void submitAnswer(lastAnswerRef.current)
   }
 
   const progress = getProgress()
 
-  // Suppress unused variable warning — user may be used in Phase 3 for personalization
-  void user
-
-  // Loading state
+  // --- Loading/error full-screen states ---
   if (!sessionRow && !fetchError) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -185,16 +164,12 @@ export default function QuizSessionPage() {
     )
   }
 
-  // Session fetch error
   if (fetchError) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-3">
           <p className="text-error font-medium">{fetchError}</p>
-          <button
-            onClick={() => navigate('/quiz/setup')}
-            className="text-sm text-accent underline"
-          >
+          <button onClick={() => navigate('/quiz/setup')} className="text-sm text-accent underline">
             Start a new quiz
           </button>
         </div>
@@ -202,135 +177,171 @@ export default function QuizSessionPage() {
     )
   }
 
+  // --- Main 2-column layout matching .pen Screen/Question and Screen/Feedback ---
   return (
-    <div className="min-h-screen bg-background">
-      {/* Session header: topic badges + progress indicator */}
-      <header className="sticky top-0 z-10 border-b border-border bg-surface px-4 py-3">
-        <div className="mx-auto max-w-3xl space-y-2">
-          {/* QUIZ-06: Topics covered in session */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-medium text-muted-foreground mr-1">Topics:</span>
-            {session?.config.topics.map(topic => (
-              <TopicBadge key={topic} topic={topic} />
-            ))}
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
+
+      {/* qTopBar — .pen: height 60, bg-surface, border-bottom, padding [0, 32], space-between, center */}
+      <header className="h-[60px] flex-shrink-0 bg-surface border-b border-border flex items-center justify-between px-8">
+
+        {/* qTopLogo — 24px logo mark + "QuizYou" text */}
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-[6px] bg-primary flex items-center justify-center text-foreground">
+            <ZapIcon />
           </div>
-          {/* QUIZ-05: Progress indicator */}
-          <ProgressIndicator
-            current={progress.current}
-            total={progress.total}
-            percent={progress.percent}
-          />
+          <span className="text-[15px] font-bold text-foreground">QuizYou</span>
+        </div>
+
+        {/* qTopCenter — progress text + 200px bar */}
+        <div className="flex flex-col items-center gap-1.5">
+          <span className="text-[13px] font-medium text-muted-foreground">
+            {evaluation
+              ? `Question ${progress.current} of ${progress.total} — Feedback`
+              : `Question ${progress.current} of ${progress.total}`
+            }
+          </span>
+          <div className="w-[200px] h-1 bg-subtle rounded-full overflow-hidden">
+            <div
+              className="h-full bg-primary rounded-full transition-all duration-300"
+              style={{ width: `${progress.percent}%` }}
+            />
+          </div>
+        </div>
+
+        {/* qTopRight — score badge + skip button (question mode) or just score badge (feedback mode) */}
+        <div className="flex items-center gap-4">
+          {/* Score badge — .pen qScoreBadge: bg-primary-muted, rounded-full, gap 6, padding [6,12] */}
+          <div className="flex items-center gap-1.5 rounded-full bg-primary-muted px-3 py-1.5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            <span className="text-[13px] font-semibold text-primary">
+              {progress.percent > 0 ? `Score: ${progress.percent}%` : 'Score: 0%'}
+            </span>
+          </div>
+
+          {/* Skip button — only in question input mode (.pen qSkipBtn: Secondary/Ghost) */}
+          {question && !isLoading && !evaluation && !evaluating && (
+            <button
+              onClick={handleSkip}
+              className="rounded-lg bg-elevated border border-border h-10 px-4 text-sm font-medium text-foreground hover:bg-subtle transition"
+            >
+              Skip
+            </button>
+          )}
         </div>
       </header>
 
-      {/* Main question area */}
-      <main className="mx-auto max-w-3xl px-4 py-8 space-y-8">
-        {/* Question generation loading state */}
-        {isLoading && (
-          <div className="rounded-lg bg-surface border border-border p-8">
-            <div className="flex flex-col items-center gap-3 text-muted-foreground">
+      {/* qBody — fill remaining height, horizontal layout */}
+      <div className="flex flex-1 overflow-hidden">
+
+        {/* qLeft — fill width, vertical, right border, padding [40, 48], gap 24, overflow-y-auto */}
+        <div className="flex-1 overflow-y-auto border-r border-border" style={{ padding: '40px 48px' }}>
+
+          {/* Loading state */}
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center h-full gap-4 text-muted-foreground">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
               <p className="text-sm">Generating question...</p>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Question generation error state */}
-        {error && !isLoading && (
-          <div className="rounded-lg bg-error-muted border border-error p-6 space-y-3">
-            <p className="text-sm text-error font-medium">Failed to generate question</p>
-            <p className="text-xs text-error">{error}</p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  if (!session) return
-                  const params = {
-                    topics: session.config.topics,
-                    difficulty: session.config.difficulty,
-                    types: session.config.questionTypes as ('coding' | 'theoretical')[],
-                    sessionId: session.sessionId,
-                    questionIndex: session.currentQuestionIndex
-                  }
-                  generate(params, session.currentQuestionIndex).then(generated => {
-                    if (generated) addQuestion(generated)
-                  })
-                }}
-                className="rounded-md bg-error px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 transition"
-              >
-                Regenerate
-              </button>
-              <button
-                onClick={handleSkip}
-                className="rounded-md border border-error px-3 py-1.5 text-xs font-medium text-error hover:bg-error-muted transition"
-              >
-                Skip this question
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Question display, answer input, and evaluation result */}
-        {question && !isLoading && (
-          <>
-            {/* QUIZ-01: Question display with clear formatting — always visible */}
-            <div className="rounded-lg bg-surface border border-border p-6">
-              <QuestionDisplay question={question} />
-            </div>
-
-            {/* Evaluation result panel — shown after successful evaluation */}
-            {evaluation && (
-              <div className="rounded-lg bg-surface border border-border p-6">
-                <EvaluationResult
-                  evaluation={evaluation}
-                  onNext={handleNext}
-                  isLastQuestion={isLastQuestion}
-                />
-              </div>
-            )}
-
-            {/* Evaluation loading state — shown while LLM is evaluating */}
-            {evaluating && (
-              <div className="rounded-lg bg-surface border border-border p-8">
-                <div className="flex flex-col items-center gap-3 text-muted-foreground">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                  {elapsedSeconds < 20 ? (
-                    <p className="text-sm">Evaluating your answer...</p>
-                  ) : (
-                    <p className="text-sm text-warning">Still evaluating... (taking longer than usual)</p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Evaluation error state — shown after failed evaluation (all retries exhausted) */}
-            {evalError && !evaluating && !evaluation && (
-              <div className="rounded-lg bg-error-muted border border-error p-6 space-y-3">
-                <p className="text-sm text-error font-medium">Evaluation failed</p>
-                <p className="text-xs text-error">{evalError}</p>
+          {/* Question generation error */}
+          {error && !isLoading && (
+            <div className="rounded-lg bg-error-muted border border-error p-6 space-y-3">
+              <p className="text-sm text-error font-medium">Failed to generate question</p>
+              <p className="text-xs text-error">{error}</p>
+              <div className="flex gap-3">
                 <button
-                  onClick={handleRetry}
+                  onClick={() => {
+                    if (!session) return
+                    const params = {
+                      topics: session.config.topics,
+                      difficulty: session.config.difficulty,
+                      types: session.config.questionTypes as ('coding' | 'theoretical')[],
+                      sessionId: session.sessionId,
+                      questionIndex: session.currentQuestionIndex
+                    }
+                    generate(params, session.currentQuestionIndex).then(generated => {
+                      if (generated) addQuestion(generated)
+                    })
+                  }}
                   className="rounded-md bg-error px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 transition"
                 >
-                  Retry
+                  Regenerate
+                </button>
+                <button
+                  onClick={handleSkip}
+                  className="rounded-md border border-error px-3 py-1.5 text-xs font-medium text-error hover:bg-error-muted transition"
+                >
+                  Skip this question
                 </button>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* QUIZ-02 + QUIZ-03: Answer input — hidden after evaluation or during evaluation */}
-            {!evaluation && !evaluating && (
-              <div className="rounded-lg bg-surface border border-border p-6">
-                <h3 className="text-sm font-semibold text-foreground mb-4">Your Answer</h3>
-                <AnswerInput
-                  question={question}
-                  onSubmit={handleSubmit}
-                  onSkip={handleSkip}
-                  isSubmitting={evaluating}
-                />
-              </div>
-            )}
-          </>
-        )}
-      </main>
+          {/* Question content in left panel */}
+          {question && !isLoading && (
+            <div className="flex flex-col gap-6">
+              {/* In feedback mode: show question in muted style + user answer box */}
+              {evaluation ? (
+                <QuestionDisplay question={question} feedbackMode />
+              ) : (
+                <QuestionDisplay question={question} />
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* qRight — 580px fixed, vertical, padding 40, gap 20, overflow-y-auto */}
+        <div className="w-[580px] flex-shrink-0 overflow-y-auto flex flex-col gap-5" style={{ padding: 40 }}>
+
+          {/* Answer input mode */}
+          {question && !isLoading && !evaluation && (
+            <AnswerInput
+              question={question}
+              onSubmit={handleSubmit}
+              onSkip={handleSkip}
+              isSubmitting={evaluating}
+            />
+          )}
+
+          {/* Evaluation loading */}
+          {evaluating && (
+            <div className="flex flex-col items-center justify-center flex-1 gap-4 text-muted-foreground">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              {elapsedSeconds < 20 ? (
+                <p className="text-sm">Evaluating your answer...</p>
+              ) : (
+                <p className="text-sm text-warning">Still evaluating... (taking longer than usual)</p>
+              )}
+            </div>
+          )}
+
+          {/* Evaluation error */}
+          {evalError && !evaluating && !evaluation && (
+            <div className="rounded-lg bg-error-muted border border-error p-6 space-y-3">
+              <p className="text-sm text-error font-medium">Evaluation failed</p>
+              <p className="text-xs text-error">{evalError}</p>
+              <button
+                onClick={handleRetry}
+                className="rounded-md bg-error px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 transition"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          {/* Evaluation result in right panel */}
+          {evaluation && (
+            <EvaluationResult
+              evaluation={evaluation}
+              onNext={handleNext}
+              isLastQuestion={isLastQuestion}
+            />
+          )}
+        </div>
+      </div>
     </div>
   )
 }
