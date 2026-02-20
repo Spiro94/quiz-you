@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-17)
 ## Current Position
 
 Phase: 4 of 4 (Dashboard & Analytics)
-Plan: 1 of 4 in current phase
-Status: Phase 4 in progress — 04-01 complete
-Last activity: 2026-02-20 — Completed 04-01: session_summaries migration, computeSessionSummary() pure function, SessionSummaryPage at /session/:sessionId/summary, updated completeQuizSession() to upsert session_summaries, router updated. Requirements COMP-02, COMP-03, COMP-04, COMP-05 complete.
+Plan: 3 of 4 in current phase
+Status: Phase 4 in progress — 04-01, 04-02, 04-03 complete
+Last activity: 2026-02-20 — Completed 04-03: getSessionWithAnswers() single join query, useSessionDetail() hook, SessionDetailPage at /session/:sessionId/detail, Details link in SessionHistoryList. Also completed 04-02: sessions service, useSessions hook, FilterBar, SessionHistoryList, Dashboard update. Requirements DASH-01, DASH-02, DASH-03, DASH-07 complete.
 
-Progress: [████████████░░░] 78% (Phase 4 in progress: 1/4 plans complete)
+Progress: [██████████████░] 93% (Phase 4 in progress: 3/4 plans complete)
 
 ## Performance Metrics
 
@@ -30,10 +30,10 @@ Progress: [████████████░░░] 78% (Phase 4 in progre
 | 1. Auth & Foundation | 3/3 COMPLETE | 161 min | 54 min |
 | 2. Quiz Setup & Q Gen | 4/4 COMPLETE | 76 min | 19 min |
 | 3. Eval & Scoring | 4/4 COMPLETE | 48 min | 12 min |
-| 4. Dashboard & Analytics | 1/4 | 2 min | 2 min |
+| 4. Dashboard & Analytics | 3/4 | 8 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-04 (69 min incl. human-verify), 03-01 (1 min), 03-02 (2 min), 03-03 (2 min), 03-04 (43 min incl. human-verify)
+- Last 5 plans: 03-04 (43 min incl. human-verify), 04-01 (2 min), 04-02 (5 min), 04-03 (1 min)
 - Trend: Auto tasks execute fast; human verification checkpoints dominate wall-clock time
 
 *Updated after each plan completion*
@@ -94,6 +94,12 @@ Recent decisions affecting current work:
 - **[04-01]** Summary insert is non-fatal (console.error only) — session completion always succeeds even if session_summaries write fails
 - **[04-01]** QuizSession.tsx navigate changed from /dashboard to /session/:sessionId/summary — closes quiz loop with feedback before dashboard return
 - **[04-01]** src/lib/dashboard/ directory established for pure computation functions with no Supabase dependency
+- **[04-02]** QueryClientProvider added to main.tsx — useQuery hooks require it at app root; was missing despite @tanstack/react-query being installed
+- **[04-02]** Server-side pagination via Supabase .range() — no client-side data slicing; overlaps() for array topic filter
+- **[04-02]** Pagination state in URL search params; filter state in React useState — browser back works for pagination
+- **[04-03]** Single .select() with nested quiz_questions() and quiz_answers() — avoids N+1 pitfall documented in RESEARCH.md
+- **[04-03]** Map<number, QuizAnswerRow> keyed by question_index — O(n) answer correlation, not O(n^2)
+- **[04-03]** staleTime: 10 minutes for session detail — data is immutable after session completes
 
 ### Pending Todos
 
@@ -111,5 +117,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 04-01-PLAN.md — session summary page (2 auto tasks, 2 commits). SUMMARY at .planning/phases/04-dashboard-analytics/04-01-SUMMARY.md. Requirements COMP-02, COMP-03, COMP-04, COMP-05 complete. Migration 20260220000000_session_summaries.sql ready to apply. Next: Phase 4 Plan 02.
+Stopped at: Completed 04-03-PLAN.md — session detail view (2 auto tasks, 2 commits). Also completed 04-02-PLAN.md as prerequisite (4 commits total). SUMMARY at .planning/phases/04-dashboard-analytics/04-03-SUMMARY.md. Requirements DASH-01, DASH-02, DASH-03, DASH-07 complete. Next: Phase 4 Plan 04 (analytics: per-topic accuracy, trends, weak-area recommendation + human verify).
 Resume file: None
